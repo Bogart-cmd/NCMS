@@ -34,6 +34,9 @@ class Students extends Model
         "birthplace",
     ];
 
+    protected $casts = [
+        'status' => 'integer', // to ensure status is always an integer
+    ];
 
     public function parent(){
         return $this->hasOne(Parents::class);

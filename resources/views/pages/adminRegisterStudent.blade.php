@@ -28,6 +28,7 @@
                     <option value="" selected disabled>Filter by Status</option>
                     <option value="1">Accepted</option>
                     <option value="0">Pending</option>
+                    <option value="2">Declined</option>
                 </select>
                 @error('status')
                     <p class="text-red-600">Required</p>
@@ -86,7 +87,15 @@
                             {{$student->created_at->format('M-d-Y')}}
                         </td>
                         <td class="px-6 py-4 capitalize">
-                            {{$student->status===1?'Accepted':'Pending'}}
+                            @if ($student->status == 0)
+                                <span class="text-yellow-500">Pending</span>
+                            @elseif ($student->status == 1)
+                                <span class="text-green-500">Accepted</span>
+                            @elseif ($student->status == 2)
+                                <span class="text-red-500">Declined</span>
+                            @else
+                                <span class="text-gray-500">Unknown</span>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

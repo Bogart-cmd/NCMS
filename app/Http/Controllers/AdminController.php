@@ -25,9 +25,6 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
 
-
-
-
 class AdminController extends Controller
 {
     //goto setting pages
@@ -45,8 +42,6 @@ class AdminController extends Controller
         return view("pages.adminRegisterStudent", ['students'=>$students, 'programs'=>$programs, 'isAll'=>true]);
     }
 
-
-
     //filter student data list
 
     public function filter(Request $request){
@@ -58,7 +53,7 @@ class AdminController extends Controller
         ]);
         $start_date = date('Y-m-d H:i:s',strtotime($filter['start_date']));
         $end_date = date('Y-m-d H:i:s',strtotime($filter['end_date']));
-        $students = Students::where('id_course','=',$filter['course'])->where('status','=',(bool)$filter['status'])->whereBetween('created_at',[$start_date, $end_date])->paginate(10);
+        $students = Students::where('id_course','=',$filter['course'])->where('status','=',(int)$filter['status'])->whereBetween('created_at',[$start_date, $end_date])->paginate(10);
         $programs = Programs::all();
         return view("pages.adminRegisterStudent", ['students'=>$students, 'programs'=>$programs, 'isAll'=>false, 'filter'=>['id_course'=>$filter['course'], 'status'=>$filter['status'], 'start_date'=> $filter['start_date'], 'end_date'=>$filter['end_date']]]);
     }
@@ -126,7 +121,7 @@ class AdminController extends Controller
         return view('pages.adminuser_profile', ['student'=>$student]);
     }
 
-    // Delete student applicant
+    // Delete student applicant (depricated)
         public function deleteApplicant(Request $request)
         {
             // Message for deleted student applicant
@@ -148,6 +143,31 @@ class AdminController extends Controller
             $student->delete();
             
             return redirect()->route('register_admin');
+        }
+
+        //Decline student applicant
+        public function declineApplicant(Request $request)
+        {
+            $student = Students::findOrFail($request->student_id);
+
+            $data = [
+                'message' => 
+                    "Thank you for your interest in the Negros Occidental Language and Information Technology Center (NOLITC). 
+                    We appreciate the time you took to complete the registration form.\n\n" .
+                    "After careful consideration, we regret to inform you that we are unable to offer you a place in the course at this time. 
+                    The selection process was highly competitive, and we received many strong registrations.\n\n" .
+                    "We encourage you to apply again in the future and wish you the best in your educational and professional endeavors. 
+                    If you have any questions, please feel free to contact us at:\n",
+                'telephone' => "(034) 435 6092",
+                'email' => "nolitc@gmail.com"
+            ];
+
+            Mail::to($student->email)->send(new Sendemail($data));
+
+            $student->status = 2;
+            $student->save();
+
+            return redirect()->back()->with('success', 'Applicant has been declined.');
         }
 
         // Accept student applicant
@@ -175,8 +195,6 @@ class AdminController extends Controller
             
             return redirect()->route('register_admin');
         }
-
-
 
     //download pdf for student profile
     public function downloadPdf($id){

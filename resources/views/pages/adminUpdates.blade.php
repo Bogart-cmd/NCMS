@@ -16,7 +16,6 @@
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
             <div>
                 <label for="content" class="block text-sm font-medium text-gray-700">Welcome Content</label>
                 <textarea name="content" id="content" rows="4" class="w-full border p-2 rounded-md focus:outline-none focus:ring focus:border-blue-300">{{ old('content', $content->content ?? '') }}</textarea>

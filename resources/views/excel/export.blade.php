@@ -95,7 +95,7 @@
                     {{$student->created_at->format('M-d-Y')}}
                 </td>
                 <td>
-                    {{$student->status===1?'Accepted':'Pending'}}
+                    {{$student->status === 1 ? 'Accepted' : ($student->status === 2 ? 'Declined' : 'Pending')}}
                 </td>
             </tr>
         @endforeach

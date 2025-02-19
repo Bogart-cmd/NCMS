@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/managePartners', 'managePartners')->name('managePartners'); //goto manage partners page
         Route::post('/add_partners', 'add_partners')->name('add_partners'); //send add partner in database
         Route::delete('/delete_partners', 'delete_partners')->name('delete_partners'); //delete partner in database
+        Route::put('/applicants/decline', [AdminController::class, 'declineApplicant'])->name('decline.applicant');
                         
         Route::get('/admin-updates', 'adminUpdates')->name('admin.updates'); // Route to show the welcome updates editor                
         // Route::put('/update-welcome', [AdminController::class, 'updateWelcome'])->name('update_welcome');
