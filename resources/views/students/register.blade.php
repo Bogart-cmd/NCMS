@@ -53,10 +53,10 @@
     <section class="qualification-section">
       <form id="registrationForm" action="{{route("register_student")}}" method="post">
         <div class="inputs preferred-qualification">
-          <h3>Preferred Qualification</h3>
+          <h3>Preferred Program</h3>
            @csrf
           <div class="input-data">
-            <label for="qualification" class="label-input-tag">Qualification *</label>
+            <label for="qualification" class="label-input-tag">Program *</label>
             <select name="course" id="qualification" class="qualification-select">
                 @foreach ($programs as $program)
                     <option value="{{$program->id}}"  {{old('course')===$program->id?'selected':''}}>{{$program->name}}</option>

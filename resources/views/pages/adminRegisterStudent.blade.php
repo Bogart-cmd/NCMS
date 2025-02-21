@@ -120,9 +120,6 @@
     @endif
 
 
-
-
-
 </main>
 <script src="js/student-table.js"></script>
 

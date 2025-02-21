@@ -186,10 +186,8 @@ class AdminController extends Controller
                 'email' => "nolitc@gmail.com"
             ];
             
-            // Send email
             Mail::to($student->email)->send(new Sendemail($data));
             
-            // Update status to accepted (1)
             $student->status = 1;
             $student->save();
             

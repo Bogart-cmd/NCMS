@@ -49,10 +49,10 @@
             <button class="edit-btn" id="btn_edit" onclick="removeDisabled()" type="button">Edit Profile</button>
         </div>
         <div class="inputs preferred-qualification">
-          <h3>Preferred Qualification</h3>
+          <h3>Preferred Program</h3>
            @csrf
           <div class="input-data">
-            <label for="qualification" class="label-input-tag">Qualification *</label>
+            <label for="qualification" class="label-input-tag">Program *</label>
             <select name="course" id="qualification" class="qualification-select" style="width: 25%" disabled>
                 @foreach ($programs as $program)
                     <option value="{{$program->id}}"  {{(int)$data['course']===$program->id?'selected':''}}>{{$program->name}}</option>

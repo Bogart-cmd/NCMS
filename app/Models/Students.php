@@ -11,7 +11,7 @@ class Students extends Model
     use HasFactory;
     protected $table = "students";
     protected $fillable = [
-        "id_course",
+        "id_course", // NOTE FOR DEV: course is retrieved from the Programs table by their ID number
         "fname",
         "mname",
         "lname",
@@ -29,7 +29,7 @@ class Students extends Model
         "civil_status",
         "education",
         "employment",
-        "status",
+        "status", // 0-pending, 1-accepted, 2-declined
         "birthdate",
         "birthplace",
     ];
