@@ -22,6 +22,6 @@ class Sendemail extends Mailable
     }
 
     public function build(){
-        return $this->from('jeyvy.paron@gmail.com')->subject('Nolitc Notice')->view('emails.mymessage')->with('data', $this->data);
-    }
+        return $this->from('jeyvy.paron@gmail.com')->subject('NOLITC Notice')->view('emails.mymessage')->with('data', $this->data);
+    }   
 }

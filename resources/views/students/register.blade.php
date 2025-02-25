@@ -172,7 +172,8 @@
             </div>
             <div class="input-data">
               <label for="zip" class="label-input-tag">Zip *</label>
-              <input type="number" name="zip" id="zip" placeholder="zip code" value="{{old('zip')}}">
+              <input type="number" name="zip" id="zip" placeholder="zip code" value="{{old('zip')}}"
+              oninput="if(this.value.length > 4){ this.value = this.value.slice(0,4); }">
               @error('zip')
               <p class="error">{{$message}}</p>
               @enderror
@@ -182,7 +183,7 @@
               <select id="nationality" name="nationality" class="nationality">
                 <option value="" disabled selected>Select Nationality</option>
                 <option value="Chinese" {{old('nationality')==='Chinese'?'selected':''}}>Chinese</option>
-                <option value="">Japanese</option>
+                <option value="Japanese" {{old('nationality')==='Japanese'?'selected':''}}>Japanese</option>
                 <option value="Korean" {{old('nationality')==='Korean'?'selected':''}}>Korean</option>
                 <option value="Indian" {{old('nationality')==='Indian'?'selected':''}}>Indian</option>
                 <option value="Pakistani" {{old('nationality')==='Pakistani'?'selected':''}}>Pakistani</option>
@@ -510,7 +511,8 @@
                 </div>
                 <div class="input-data">
                     <label for="pzip" class="label-input-tag">Zip *</label>
-                    <input type="number" name="pzip" id="pzip" placeholder="zip code" value="{{old('pzip')}}">
+                    <input type="number" name="pzip" id="pzip" placeholder="zip code" value="{{old('pzip')}}"
+                    oninput="if(this.value.length > 4){ this.value = this.value.slice(0,4); }">
                     @error('pzip')
                     <p class="error">{{$message}}</p>
                     @enderror
@@ -725,10 +727,10 @@
     @endif
   </footer>
 
-  <!-- scripts for registration form -->
-  <script src="js/register.js"></script>
+<!-- scripts for registration form -->
+<script src="js/register.js"></script>
 
-  <script>
+<script>
   document.getElementById('id01').style.display = 'block';
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -780,6 +782,44 @@
     localStorage.setItem("privacyAccepted", "true");
     document.getElementById("id01").style.display = "none";
   }
+// modal script for status of entry return
+  document.addEventListener("DOMContentLoaded", function () {
+    var modal = document.getElementById("statusModal");
+    var closeButton = document.querySelector(".close"); 
+    var closeModalBtn = document.getElementById("modalCloseBtn");
+    var modalMessageElement = document.getElementById("modalMessage");
+
+    if (!modal || !modalMessageElement) {
+        console.error("Modal elements not found.");
+        return;
+    }
+
+    var showModal = "{{ session('modalMessage') }}";
+
+    if (showModal.trim().length > 0) { 
+        modalMessageElement.innerText = showModal;
+        modal.style.display = "flex"; 
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
+
 
 </script>
 
@@ -793,5 +833,20 @@
     });
 </script>
 @endif
+
+<div id="statusModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Application Status</h2><br>
+        <p id="modalMessage"></p>
+        <p class="contact-support">
+            For further inquiries, please contact us at:<br>
+            <strong>support@example.com</strong><br>
+            or call <strong>+63 912 345 6789</strong>.
+        </p>
+        <button id="modalCloseBtn" class="modal-btn">Close</button>
+    </div>
+</div>
+
 </body>
 </html>

@@ -54,20 +54,10 @@ class StudentsController extends Controller
         return view('students.register_review',['data'=> $data, 'programs'=>$programs]);
     }
 
-    public function submit_data(Request $request){
+    public function submit_data(Request $request) {
         $data = $request->validate([
             "course"            => 'required|numeric',
-            'lname'             => [
-                'required',
-                function($attribute, $value, $fail) use ($request) {
-                    $fname = strtolower($request->input('fname'));
-                    $mname = strtolower($request->input('mname'));
-                    $lname = strtolower($value);
-                    if (Students::whereRaw('LOWER(fname) = ? and LOWER(mname) = ? and LOWER(lname) = ?', [$fname, $mname, $lname])->exists()) {
-                        $fail('A student with the same full name (first, middle, and last name) already exists.');
-                    }
-                }
-            ],
+            'lname'             => 'required',
             'fname'             => 'required',
             'mname'             => 'required',
             'suffix'            => 'required',
@@ -85,14 +75,14 @@ class StudentsController extends Controller
             'pzip'              => 'required|numeric',
             'nationality'       => 'required',
             'contact-number'    => 'required|numeric|digits:11',
-            'email'             => 'required|email|unique:students,email',
+            'email'             => 'required|email',
             'gender'            => 'required',
             'civil-status'      => 'required',
             'employement'       => 'required',
             'birthdate'         => 'required|before:today|date',
             'birthplace-region' => 'required',
             'birthplace-province'=> 'required',
-            'birthplace-pcity-municipality'=> 'required',
+            'birthplace-pcity-municipality'=> 'req  uired',
             'trainee'           => 'required',
             'plname'            => 'required',
             'pfname'            => 'required',
@@ -101,7 +91,34 @@ class StudentsController extends Controller
             'pcontact'          => 'required|numeric|digits:11',
             'classification'    => 'required|array|min:1',
         ]);
-
+    
+        // Check if student already has an entry for this course
+        $existingStudent = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_course = ?', [
+            strtolower($data['fname']),
+            strtolower($data['mname']),
+            strtolower($data['lname']),
+            $data['course']
+        ])->select('status')->first();
+    
+        if ($existingStudent) { // check for status of existing entry. else, submit
+            if ((int)$existingStudent->status === 1) { //accepted
+                session()->flash('modalMessage', 'You already have an application for this program and cannot reapply.');
+                return back();
+            } elseif ((int)$existingStudent->status === 0) { //pending
+                session()->flash('modalMessage', 'You already have a pending entry for this program.');
+                return back();
+            } elseif ((int)$existingStudent->status === 2) { // declined
+                session([
+                    'reapply_fname' => $data['fname'],
+                    'reapply_mname' => $data['mname'],
+                    'reapply_lname' => $data['lname'],
+                    'reapply_course' => $data['course'],
+                ]);
+                return redirect('/reapply');
+            }
+        }
+    
+        // Proceed with registration
         $student = [
             'id_course'     => (int)$data['course'],
             'fname'         => strtolower($data['fname']),
@@ -123,25 +140,71 @@ class StudentsController extends Controller
             'education'     => $data['trainee'],
             'region'        => $data['region'],
             'province'      => $data['province'],
-            'status'        => 0, // set default status as an integer (e.g., 0 for pending)
+            'status'        => '0', // Default status
         ];
-
-        Students::create($student);
-        $lastest_id = DB::table('students')->latest('updated_at')->first();
-        $parents = ['students_id'=>$lastest_id->id,'plname'=>$data['plname'], 'pfname'=>$data['pfname'], 'pmname'=>$data['pmname'],'psname'=>$data['psname'],'pcontact_number'=>$data['pcontact'], 'pstreet_number'=>$data['pnumber-street'], 'pmunicipality'=>$data['pcity-municipality'], 'pdistrict'=>$data['pdistrict'], 'pzipcode'=>$data['zip']];
+    
+        $newStudent = Students::create($student);
+        
+        $parents = [
+            'students_id' => $newStudent->id,
+            'plname' => $data['plname'],
+            'pfname' => $data['pfname'],
+            'pmname' => $data['pmname'],
+            'psname' => $data['psname'],
+            'pcontact_number' => $data['pcontact'],
+            'pstreet_number' => $data['pnumber-street'],
+            'pmunicipality' => $data['pcity-municipality'],
+            'pdistrict' => $data['pdistrict'],
+            'pzipcode' => $data['zip']
+        ];
         Parents::create($parents);
+    
         foreach($data['classification'] as $classification){
-            $classification_data = ['students_id'=>$lastest_id->id, 'classification_data'=>$classification];
-            Classification::create($classification_data);
+            Classification::create([
+                'students_id' => $newStudent->id,
+                'classification_data' => $classification
+            ]);
         }
-        event(new PusherBroadcast('Applicant name: '.$student['fname']));
+    
+        event(new PusherBroadcast('Applicant name: ' . $student['fname']));
+    
         return redirect("/thank_you");
-     }
+    }    
 
      public function showRegistrationForm() {
         // Return the registration view (with an empty form, for example)
         $programs = Programs::all();
         return view('students.register', compact('programs'));
+    }
+
+    public function reapply(Request $request)
+    {
+        $student = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_course = ?', [
+            strtolower(session('reapply_fname')),
+            strtolower(session('reapply_mname')),
+            strtolower(session('reapply_lname')),
+            session('reapply_course')
+        ])->first();
+    
+        if (!$student) {
+            return back()->withErrors(['error' => 'Student record not found.']);
+        }
+    
+        if ($student->status !== 2) {
+            return back()->withErrors(['error' => 'You can only reapply if your application was declined.']);
+        }
+    
+        $cooldownPeriod = now()->subDays(7);
+        if ($student->updated_at > $cooldownPeriod) {
+            $remainingTime = $student->updated_at->addDays(7)->diffForHumans();
+            return back()->withErrors(['error' => "You can reapply in $remainingTime."]);
+        }
+    
+        $student->update(['status' => 0]);
+    
+        session()->forget(['reapply_fname', 'reapply_mname', 'reapply_lname', 'reapply_course']);
+    
+        return back()->with('success', 'Your reapplication has been submitted successfully.');
     }
     
 }

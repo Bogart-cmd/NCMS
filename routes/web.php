@@ -77,6 +77,12 @@ Route::controller(NolitcController::class)->group(function () {
     Route::get("/thank_you", "thank_page")->name("thank_page.student");
 });
 
+Route::get('/reapply', function () {
+    return view('reapply');
+})->name('reapply');
+
+Route::post('/reapply', [StudentsController::class, 'reapply']);
+
 Route::get('/test-email', function () {
     $data = ['message' => 'This is a test email from NCMS.'];
     Mail::to('jeyvy.paron@gmail.com')->send(new Sendemail($data));

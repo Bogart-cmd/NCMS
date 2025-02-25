@@ -8,6 +8,7 @@
 </head>
 <body>
     <p>
+        
         Dear Applicant, <br>
 
         {{$data['message']}} <br>
@@ -24,6 +25,7 @@
         Negros Occidental <br>
         Telephone: (034) 435 6092 <br>
         Email: nolitc@gmail.com <br>
+
     </p>
 
 </body>
