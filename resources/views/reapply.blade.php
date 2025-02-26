@@ -32,6 +32,7 @@
             <h1>SORRY!</h1>
             <h3>Your previous registration was declined.</h3>
             <h3>Would you like to re-apply in this course?</h3>
+            <h3>NOTE: You can also apply to other programs!</h3>
             
             <div class="btn-container">
                 <form id="reapplyForm" action="{{ route('reapply') }}" method="POST">

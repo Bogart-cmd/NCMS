@@ -102,7 +102,8 @@ class StudentsController extends Controller
     
         if ($existingStudent) { // check for status of existing entry. else, submit
             if ((int)$existingStudent->status === 1) { //accepted
-                session()->flash('modalMessage', 'You already have an application for this program and cannot reapply.');
+                session()->flash('modalMessage', 'You already have an application for this program and cannot reapply.<br>
+                NOTE: If you dropped from this program, you can only apply to other programs');
                 return back();
             } elseif ((int)$existingStudent->status === 0) { //pending
                 session()->flash('modalMessage', 'You already have a pending entry for this program.');

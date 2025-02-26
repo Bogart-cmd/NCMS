@@ -61,7 +61,6 @@ nav a {
 }
 
 /* intro */
-
 .intro h1, .intro p {
     position: relative;
     z-index: 1;
@@ -101,26 +100,34 @@ nav a {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 2);
 }
 
+/* register button */
 .intro-btn button {
     padding: 1em 2.5em;
     background-color: #168753;
     color: #fff;
     border: none;
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.2em;
     margin-top: 1em;
-    border-radius: 5px;
+    border-radius: 10px;
     position: relative;
     left: 870px;
     top: -230px;
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    
+    animation: pulse 1.5s infinite ease-in-out;
 }
 
 .intro-btn button:hover { 
-    background-color: #0f6a3d; 
-    transform: scale(1.05);
-    cursor: pointer;
+    background-color: #0f6a3d;
+    transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 /* about */
@@ -192,10 +199,6 @@ nav a {
     top: 70%;
     left: 58%;
 }
-
-/* background color */
-
-
 
 /* programs */
 .programs {
@@ -365,8 +368,6 @@ nav a {
     padding: 5px;
     border-radius: 5px;
 }
-
-
 
 /* scorecard */
 
