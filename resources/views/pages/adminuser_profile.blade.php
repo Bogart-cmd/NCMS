@@ -27,9 +27,9 @@
             </div>
             <div class="text-right">
                 <h2 class="text-2xl font-black">
-                    {{$student->course}}
+                    {{$student->program->name ?? 'No Program'}}
                 </h2>
-                <p>Qualification</p>
+                <p>Program</p>
             </div>
         </div>
         <div class="grid grid-cols-2 mt-2">

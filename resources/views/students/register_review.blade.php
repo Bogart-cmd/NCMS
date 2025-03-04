@@ -53,9 +53,9 @@
            @csrf
           <div class="input-data">
             <label for="qualification" class="label-input-tag">Program *</label>
-            <select name="course" id="qualification" class="qualification-select" style="width: 25%" disabled>
+            <select name="program" id="qualification" class="qualification-select" style="width: 25%" disabled>
                 @foreach ($programs as $program)
-                    <option value="{{$program->id}}"  {{(int)$data['course']===$program->id?'selected':''}}>{{$program->name}}</option>
+                    <option value="{{$program->id}}"  {{(int)$data['program']===$program->id?'selected':''}}>{{$program->name}}</option>
                 @endforeach
                 <!-- {{-- <option value="" selected>Qualification</option>
                 <option value="Visual Graphic Design NCIII"  {{$data['course']==='Visual Graphic Design NCIII'?'selected':''}}>Visual Graphic Design NCIII</option>
@@ -63,7 +63,7 @@
                 <option value="Animation NC II" {{$data['course']==='Animation NC II'?'selected':''}}>Animation NC II</option>
                 <option value="2D Animation NC III" {{$data['course']==='2D Animation NC III'?'selected':''}}>2D Animation NC III</option> --}} -->
             </select>
-            @error('course')
+            @error('program')
                 <p class="error">{{$message}}</p>
             @enderror
           </div>

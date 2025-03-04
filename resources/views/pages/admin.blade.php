@@ -25,7 +25,7 @@
         </div>
         <div class="grid grid-cols-2 gap-2 py-2 px-3">
             <div class="rounded-md shadow-lg bg-slate-100 w-[30vw] h-[100%] flex flex-col p-3">
-                <h2 class="font-bold text-xl">Student by Course</h2>
+                <h2 class="font-bold text-xl">Student by Program</h2>
                 <div class="graph w-[100%] h-[100%]">
                     <canvas id="bar"></canvas>
                 </div>

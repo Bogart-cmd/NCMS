@@ -15,7 +15,7 @@ class StudentsController extends Controller
     public function registerStudent(Request $request){
 
         $data = $request->validate([ //data validation
-           "course"=> 'required',
+           "program"=> 'required',
            'lname'=> 'required',
            'fname'=> 'required',
            'mname'=> 'required',
@@ -56,7 +56,7 @@ class StudentsController extends Controller
 
     public function submit_data(Request $request) {
         $data = $request->validate([
-            "course"            => 'required|numeric',
+            "program"            => 'required|numeric',
             'lname'             => 'required',
             'fname'             => 'required',
             'mname'             => 'required',
@@ -92,18 +92,17 @@ class StudentsController extends Controller
             'classification'    => 'required|array|min:1',
         ]);
     
-        // Check if student already has an entry for this course
-        $existingStudent = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_course = ?', [
+        // Check if student already has an entry for this program
+        $existingStudent = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_program = ?', [
             strtolower($data['fname']),
             strtolower($data['mname']),
             strtolower($data['lname']),
-            $data['course']
+            $data['program']
         ])->select('status')->first();
     
         if ($existingStudent) { // check for status of existing entry. else, submit
             if ((int)$existingStudent->status === 1) { //accepted
-                session()->flash('modalMessage', 'You already have an application for this program and cannot reapply.<br>
-                NOTE: If you dropped from this program, you can only apply to other programs');
+                session()->flash('modalMessage', 'You already have an application for this program and cannot reapply. NOTE: You can reapply to other courses available at NOLITC');
                 return back();
             } elseif ((int)$existingStudent->status === 0) { //pending
                 session()->flash('modalMessage', 'You already have a pending entry for this program.');
@@ -113,7 +112,7 @@ class StudentsController extends Controller
                     'reapply_fname' => $data['fname'],
                     'reapply_mname' => $data['mname'],
                     'reapply_lname' => $data['lname'],
-                    'reapply_course' => $data['course'],
+                    'reapply_program' => $data['program'],
                 ]);
                 return redirect('/reapply');
             }
@@ -121,7 +120,7 @@ class StudentsController extends Controller
     
         // Proceed with registration
         $student = [
-            'id_course'     => (int)$data['course'],
+            'id_program'     => (int)$data['program'],
             'fname'         => strtolower($data['fname']),
             'lname'         => strtolower($data['lname']),
             'mname'         => strtolower($data['mname']),
@@ -141,7 +140,7 @@ class StudentsController extends Controller
             'education'     => $data['trainee'],
             'region'        => $data['region'],
             'province'      => $data['province'],
-            'status'        => '0', // Default status
+            'status'        => '0', // default status is pending
         ];
     
         $newStudent = Students::create($student);
@@ -180,11 +179,11 @@ class StudentsController extends Controller
 
     public function reapply(Request $request)
     {
-        $student = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_course = ?', [
+        $student = Students::whereRaw('LOWER(fname) = ? AND LOWER(mname) = ? AND LOWER(lname) = ? AND id_program = ?', [
             strtolower(session('reapply_fname')),
             strtolower(session('reapply_mname')),
             strtolower(session('reapply_lname')),
-            session('reapply_course')
+            session('reapply_program')
         ])->first();
     
         if (!$student) {
@@ -203,7 +202,7 @@ class StudentsController extends Controller
     
         $student->update(['status' => 0]);
     
-        session()->forget(['reapply_fname', 'reapply_mname', 'reapply_lname', 'reapply_course']);
+        session()->forget(['reapply_fname', 'reapply_mname', 'reapply_lname', 'reapply_program']);
     
         return back()->with('success', 'Your reapplication has been submitted successfully.');
     }

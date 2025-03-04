@@ -15,7 +15,7 @@
             </section>
         </form>
         {{-- <select name="filter" id="filter" class="border border-solid border-black-600 w-56 h-11 rounded-md focus:outline-none px-2">
-            <option value="" selected disabled>Filter by Course</option>
+            <option value="" selected disabled>Filter by Program</option>
             <option value="Visual Graphic Design NCIII">Visual Graphic Design NCIII</option>
             <option value="Contact Center Services NC II">Contact Center Services NC II</option>
             <option value="Animation NC II">Animation NC II</option>
@@ -29,7 +29,7 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <th scope="col" class="px-6 py-3 uppercase">id</th>
                     <th scope="col" class="px-6 py-3 capitalize">Name</th>
-                    <th scope="col" class="px-6 py-3 capitalize">Course</th>
+                    <th scope="col" class="px-6 py-3 capitalize">Program</th>
                     <th scope="col" class="px-6 py-3 capitalize">Contact Number</th>
                     <th scope="col" class="px-6 py-3 capitalize">Email</th>
                     <th scope="col" class="px-6 py-3 capitalize">Status</th>
@@ -47,7 +47,7 @@
                                 {{$student->fname." ".$student->lname}}
                             </td>
                             <td class="px-6 py-4 capitalize">
-                                {{$student->course}}
+                                {{$student->program}}
                             </td>
                             <td class="px-6 py-4 capitalize">
                                 0{{$student->contact_number}}

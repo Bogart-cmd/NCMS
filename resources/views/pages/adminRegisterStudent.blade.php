@@ -13,13 +13,13 @@
         <section class="w-full flex flex-row gap-x-2">
             {{-- nolitcText --}}
             <div class="flex flex-col">
-                <select name="course" id="course" class="border border-solid border-black-600 w-56 h-11 rounded-md focus:outline-none px-2">
-                    <option value="" selected disabled>Filter by Course</option>
+                <select name="program" id="course" class="border border-solid border-black-600 w-56 h-11 rounded-md focus:outline-none px-2">
+                    <option value="" selected disabled>Filter by Program</option>
                     @foreach ($programs as $program)
                         <option value="{{$program->id}}">{{$program->name}}</option>
                     @endforeach
                 </select>
-                @error('course')
+                @error('program')
                     <p class="text-red-600">Required</p>
                 @enderror
             </div>
@@ -56,7 +56,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <th scope="col" class="px-6 py-3 uppercase">#</th>
                 <th scope="col" class="px-6 py-3 capitalize">Name</th>
-                <th scope="col" class="px-6 py-3 capitalize">Course</th>
+                <th scope="col" class="px-6 py-3 capitalize">Program</th>
                 <th scope="col" class="px-6 py-3 capitalize">Contact Number</th>
                 <th scope="col" class="px-6 py-3 capitalize">Email</th>
                 <th scope="col" class="px-6 py-3 capitalize">Date</th>
@@ -111,7 +111,7 @@
     @else
           <form action="{{route('export')}}" method="POST" class="export-btn mt-4">
             @csrf
-            <input type="number" name="course" value="{{$filter['id_course']}}" class="hidden">
+            <input type="number" name="program" value="{{$filter['id_program']}}" class="hidden">
             <input type="number" name="status" value="{{$filter['status']}}" class="hidden">
             <input type="date" name="start_date" value="{{$filter['start_date']}}" class="hidden">
             <input type="date" name="end_date" value="{{$filter['end_date']}}" class="hidden">

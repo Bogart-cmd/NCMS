@@ -49,15 +49,15 @@ class AuthUser extends Controller
         //bar
         $total_student = Students::count();
         $totalNewStudent = Students::whereBetween('updated_at', [Carbon::now()->subDay(7),'NOW()'])->count();
-        $total_pending = Students::where('status','=',false)->count();
+        $total_pending = Students::where('status','=',0)->count();
 
-        $data = Students::groupBy('id_course')->select(DB::raw('id_course, count(*) as total_count'))->where('status','=',true)->whereMonth('created_at', Carbon::today()->month)->get();
+        $data = Students::groupBy('id_program')->select(DB::raw('id_program, count(*) as total_count'))->where('status','=',1)->whereMonth('created_at', Carbon::today()->month)->get();
         //separate data label course and value
         $labels_course = array();
         $values_course = array();
 
         foreach($data as $id_course){
-            $program = Programs::where('id','=',$id_course->id_course)->first();
+            $program = Programs::where('id','=',$id_program->id_program)->first();
             $values_course[] = $id_course->total_count;
             $labels_course[] = $program->name;
         }
@@ -148,8 +148,8 @@ class AuthUser extends Controller
 
         $total_student = Students::count(); //total of all student
         $totalNewStudent = Students::whereBetween('updated_at', [Carbon::now()->subDay(7),'NOW()'])->count(); //get all new user
-        $total_pending = Students::where('status','=',false)->count(); //total of pending student
-        $data_graphs = Students::groupBy('id_course')->select(DB::raw('id_course, count(*) as total_course'))->get(); //get total count by course
+        $total_pending = Students::where('status','=',0)->count(); //total of pending student
+        $data_graphs = Students::groupBy('id_program')->select(DB::raw('id_program, count(*) as total_program'))->get(); //get total count by course
         $data_labels = array();
         $data_values = array();
         foreach($data_graphs as $data_graph){

@@ -3,7 +3,7 @@
         <tr>
             <th>#</th>
             <th>Name</th>
-            <th>Course</th>
+            <th>Program</th>
             <th>Region</th>
             <th>Province</th>
             <th>City/Municipality</th>

@@ -11,7 +11,7 @@ class Students extends Model
     use HasFactory;
     protected $table = "students";
     protected $fillable = [
-        "id_course", // NOTE FOR DEV: course is retrieved from the Programs table by their ID number
+        "id_program",
         "fname",
         "mname",
         "lname",
@@ -47,7 +47,7 @@ class Students extends Model
     }
 
     public function program(){
-        return $this->hasOne(Programs::class, 'id', 'id_course');
+        return $this->hasOne(Programs::class, 'id', 'id_program');
     }
 
 
