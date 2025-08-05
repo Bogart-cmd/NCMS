@@ -57,7 +57,7 @@ class AuthUser extends Controller
         $values_course = array();
 
         foreach($data as $id_course){
-            $program = Programs::where('id','=',$id_program->id_program)->first();
+            $program = Programs::where('id','=',$id_course->id_program)->first();
             $values_course[] = $id_course->total_count;
             $labels_course[] = $program->name;
         }
