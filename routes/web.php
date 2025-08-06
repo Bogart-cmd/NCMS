@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
                         
         Route::get('/admin-updates', 'adminUpdates')->name('admin.updates'); // Route to show the welcome updates editor                
         // Route::put('/update-welcome', [AdminController::class, 'updateWelcome'])->name('update_welcome');
-        Route::put('/admin-updates', 'updateAdminUpdates', [AdminController::class, 'updateAdminUpdates'])->name('update.admin.updates'); // Route to update the welcome content from the editor
+        Route::put('/admin-updates', [AdminController::class, 'updateAdminUpdates'])->name('update.admin.updates'); // Route to update the welcome content from the editor
     });
 });
 

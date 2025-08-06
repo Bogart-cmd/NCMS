@@ -13,7 +13,12 @@
         <div class="header-content">
             <img src="image-website/logo.png" alt="NOLITC Logo" class="logo">
             <h2>NEGROS OCCIDENTAL LANGUANGE <br>AND INFORMATION TECHNOLOGY  CENTER</h2>
-            <nav>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav id="nav-menu">
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#programs">Programs</a></li>

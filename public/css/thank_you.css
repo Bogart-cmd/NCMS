@@ -23,11 +23,16 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1em;
+    flex-wrap: wrap;
+    position: relative;
 }
 
 .logo {
     height: 90px;
     padding-left: 120px;
+    max-width: 100%;
+    height: auto;
+    flex-shrink: 0;
 }
 
 h2{
@@ -35,33 +40,88 @@ h2{
     left: -220px;
     color: hsla(152, 72%, 31%, 1);
     font-weight: 900;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    line-height: 1.2;
+    flex: 1;
+    text-align: center;
+    margin: 0 1rem;
+}
+
+nav {
+    display: flex;
+    align-items: center;
 }
 
 nav ul {
     list-style: none;
     display: flex;
     gap: 0.1em;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
 }
 
 nav a {
     text-decoration: none;
     color: hsla(241, 39%, 41%, 1);
     font-weight: bolder;
-    padding-right: 50px;
+    padding: 0.5em 1em;
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
+    transition: color 0.3s ease;
+    display: block;
+}
+
+nav a:hover {
+    color: var(--nolitc-bg-color);
+}
+
+/* Hamburger menu for mobile */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 0.5em;
+    background: none;
+    border: none;
+    z-index: 1001;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--nolitc-bg-color);
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 .container {
     text-align: center;
+    padding-top: 120px;
 }
 .container img {
     max-width: 200px;
     position: relative;
     top: 250px;
     left: -16%;
+    max-width: 100%;
+    height: auto;
 }
 .container h1 {
     color: hsla(168, 100%, 25%, 1);
-    font-size: 4em;
+    font-size: clamp(2rem, 6vw, 4rem);
     font-weight: 900;
     position: relative;
     top: -120px;
@@ -73,12 +133,13 @@ nav a {
     left: 1.5%;
     line-height: 1.5;
     font-weight: lighter;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
 }
 
 .btn {
     display: inline-block;
     margin-top: 15px;
-    padding: 10px 20px;
+    padding: clamp(0.8em, 2vw, 1em) clamp(1.5em, 4vw, 2em);
     background-color: #403F91;
     color: white;
     text-decoration: none;
@@ -87,6 +148,7 @@ nav a {
     top: -140px;
     position: relative;
     left: -95px;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
 }
 
 /* footer */
@@ -94,175 +156,466 @@ nav a {
 .footer{
     position: relative;
     background-color: hsla(168, 100%, 25%, 1);
-    height: 200px;
+    height: auto;
+    min-height: 200px;
     width: auto;
     z-index: 1;
     top: 43px;
+    padding: 1rem;
 }
 
 .republic{
-    font-size: 15px;
+    font-size: clamp(12px, 2.5vw, 15px);
     color: white;
     position: relative;
     top: 25px;
     left: 20%;
 }
+
 .content{
     color: white;
     position: relative;
     top: 5px;
     left: 20%;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
 }
 
 .ph{
-    font-size: 15px;
+    font-size: clamp(12px, 2.5vw, 15px);
     color: white;
     position: relative;
     top: -75px;
     left: 45%;
 }
+
 .learn{
     color: white;
     position: absolute;
     top: 44px;
     left: 45%;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
 }
+
 .gov1{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 45%;
     top: 100px;
 }
+
 .gov2{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 45%;
     top: 120px;
 }
+
 .gov3{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 45%;
     top: 140px;
 }
+
 .goverment{
-    font-size: 15px;
+    font-size: clamp(12px, 2.5vw, 15px);
     color: white;
     position: absolute;
     top: 5px;
     left: 65%;
     font-weight: bold;
 }
+
 a{
     text-decoration: none;
 }
+
 .pres{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 45px;
 }
+
 .vice{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 65px;
 }
+
 .senate{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 85px;
 }
+
 .house{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 105px;
 }
+
 .supreme{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 125px;
 }
+
 .appeals{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 145px;
 }
+
 .sandigan{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 165px;
 }
+
 .negros{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 65%;
     top: 185px;
 }
+
 .visit{
-    font-size: 15px;
+    font-size: clamp(12px, 2.5vw, 15px);
     color: white;
     position: absolute;
     top: 5px;
     left: 85%;
     font-weight: bold;
 }
+
 .paglaum{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 85%;
     top: 35px;
 }
+
 .phone{
     position: absolute;
     color: white;
-    font-size: 11px;
+    font-size: clamp(10px, 2vw, 11px);
     font-weight: lighter;
     left: 85%;
     top: 85px;
 }
+
 .register{
     position: absolute;
     top: 25px;
-    font-size: 55px;
+    font-size: clamp(30px, 8vw, 55px);
     left: 160px;
 }
+
 .pic{
     height: 90%;
     left: 100px;
     position: absolute;
     top: 20px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile-first responsive design */
+@media only screen and (max-width: 767px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.5em;
+        gap: 1rem;
+    }
+    
+    .logo {
+        height: auto;
+        max-height: 60px;
+        padding-left: 0;
+        margin-bottom: 1rem;
+        order: 1;
+    }
+    
+    h2 {
+        left: 0;
+        text-align: center;
+        margin: 0.5rem 0;
+        font-size: clamp(0.7rem, 3vw, 1rem);
+        order: 2;
+        position: static;
+    }
+    
+    .hamburger {
+        display: flex;
+        order: 3;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+    
+    nav {
+        width: 100%;
+        order: 4;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-top: 1px solid #eee;
+        z-index: 1000;
+    }
+    
+    nav.active {
+        display: block;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+    }
+    
+    nav li {
+        border-bottom: 1px solid #eee;
+    }
+    
+    nav a {
+        padding: 1rem;
+        text-align: center;
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        border-radius: 0;
+    }
+    
+    nav a:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .container {
+        padding-top: 200px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .container img {
+        max-width: 150px;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .container h1 {
+        font-size: clamp(1.5rem, 6vw, 3rem);
+        top: -80px;
+    }
+    
+    .container h3 {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        top: -100px;
+        left: 0;
+        margin: 0 1rem;
+    }
+    
+    .btn {
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        padding: 0.8em 1.5em;
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+    
+    .republic, .content, .ph, .learn, .gov1, .gov2, .gov3, .goverment, .pres, .vice, .senate, .house, .supreme, .appeals, .sandigan, .negros, .visit, .paglaum, .phone {
+        position: static;
+        display: block;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+    
+    .register {
+        position: static;
+        display: block;
+        text-align: center;
+        margin: 1rem 0;
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+    
+    .pic {
+        position: static;
+        display: block;
+        margin: 1rem auto;
+        max-width: 150px;
+        height: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .header-content {
+        padding: 1%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .logo {
+        height: 60px;
+        padding-left: 20px;
+        flex-shrink: 0;
+    }
+    
+    h2 {
+        left: 0;
+        position: static;
+        font-size: clamp(0.8rem, 2vw, 1rem);
+        flex: 1;
+        text-align: center;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+    
+    nav{
+        width: auto;
+        display: block;
+    }
+    
+    nav > ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5em;
+    }
+    
+    nav > ul > li{
+        text-align: center;
+    }
+    
+    nav a {
+        padding: 0.5em 1em;
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+    }
+    
+    .container {
+        padding-top: 150px;
+    }
+    
+    .container img {
+        max-width: 180px;
+    }
+    
+    .container h1 {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+    }
+    
+    .container h3 {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    }
+    
+    .btn {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .header-content {
+        padding: 1em;
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+    }
+    
+    .logo {
+        height: 90px;
+        padding-left: 120px;
+        flex-shrink: 0;
+    }
+    
+    h2 {
+        left: -220px;
+        position: relative;
+        font-size: clamp(0.8rem, 2vw, 1.2rem);
+        flex: 1;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+    
+    nav{
+        display: block;
+        flex-shrink: 0;
+    }
+    
+    nav > ul{
+        display: flex;
+        flex-direction: row;
+        gap: 0.1em;
+    }
+    
+    nav a {
+        padding-right: 50px;
+        font-size: clamp(0.7rem, 1.5vw, 1rem);
+    }
+    
+    .container {
+        padding-top: 120px;
+    }
+    
+    .container img {
+        max-width: 200px;
+    }
+    
+    .container h1 {
+        font-size: 4rem;
+    }
+    
+    .container h3 {
+        font-size: 1.2rem;
+    }
+    
+    .btn {
+        font-size: 1.2rem;
+    }
 }
