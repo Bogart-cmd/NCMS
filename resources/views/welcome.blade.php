@@ -1,49 +1,113 @@
 @include('partials.frontend-header', ['show_hamburger' => true])
 
-    <section id="home" class="intro">
-        <img src="{{'./assets/img/'.$datas->image}}" alt="Group of Students" class="student">
-        <div class="intro-text">
-            <h1>Upskill Your Way to Success at NOLITC</h1>
-            <p>Unlock your potential and pave the way to success with NOLITC's upskilling programs!</p>
+    <section id="home" class="intro hero-split">
+        <div class="intro-text hero-left">
+            <div class="hero-content">
+                <h1>Upskill Your Way to Success at NOLITC</h1>
+                <p>Unlock your potential and pave the way to success with NOLITC's upskilling programs!</p>
+                <a href="/register" class="intro-btn"><button>🎓 Register Now!</button></a>
+            </div>
+        </div>
+        <div class="hero-right">
+            @if(count($datas) > 0)
+                <img id="intro-slideshow" src="{{ './assets/img/' . $datas[0]->image }}" alt="Group of Students" class="student slideshow-image" />
+            @else
+                <img src="{{ './assets/img/default.jpg' }}" alt="Default Image" class="student" />
+            @endif
         </div>
     </section>
 
-    <section id="intro-btn" class="intro-btn">
-        <a href="/register"><button>Register Now!</button></a>
-    </section>
+    @if(count($datas) > 1)
+    <style>
+        .slideshow-image {
+            transition: opacity 0.8s ease-in-out;
+        }
+        .slideshow-image.fade-out {
+            opacity: 0;
+        }
+        .slideshow-image.fade-in {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = [
+                @foreach($datas as $img)
+                    "{{ './assets/img/' . $img->image }}",
+                @endforeach
+            ];
+            let idx = 0;
+            const imgEl = document.getElementById('intro-slideshow');
+            
+            if (imgEl && images.length > 1) {
+                function changeImage() {
+                    // Fade out
+                    imgEl.classList.add('fade-out');
+                    
+                    setTimeout(() => {
+                        // Change image
+                        idx = (idx + 1) % images.length;
+                        imgEl.src = images[idx];
+                        
+                        // Fade in
+                        imgEl.classList.remove('fade-out');
+                        imgEl.classList.add('fade-in');
+                        
+                        setTimeout(() => {
+                            imgEl.classList.remove('fade-in');
+                        }, 100);
+                    }, 400);
+                }
+                
+                // Change image every 3 seconds with smooth transition
+                setInterval(changeImage, 3000);
+            }
+        });
+    </script>
+    @endif
 
     <section id="about" class="about">
-        <span class="span"></span>
-        <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot">
-        <p>
-            The Negros Occidental Language and Information Technology Center (NOLITC) is a preferred human resource provider of leading Business Process Management companies in Negros Occidental. It is the only government-run language and IT center in Negros island, duly registered and accredited by TESDA. NOLITC is a talent development initiative of the Provincial Government of Negros Occidental geared towards poverty reduction in the countryside.
-        </p>
-        <a href="{{route('know_more')}}"><button class="know">Know more</button></a>
-        <img src="image-website/Abanse-Negrense-Logo-horizontal-Transparent 1.png" alt="abanse negrense" class="abanse">
-        <img src="image-website/nolitc inspire 1.png" alt="nolitc" class="nolitc">
+        <div class="about-content">
+            <div class="about-left">
+                <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot">
+            </div>
+            <div class="about-right">
+                <div class="about-text-section">
+                    <p>
+                        The Negros Occidental Language and Information Technology Center (NOLITC) is a preferred human resource provider of leading Business Process Management companies in Negros Occidental. It is the only government-run language and IT center in Negros island, duly registered and accredited by TESDA. NOLITC is a talent development initiative of the Provincial Government of Negros Occidental geared towards poverty reduction in the countryside.
+                    </p>
+                    <a href="{{route('know_more')}}"><button class="know">Know more!</button></a>
+                </div>
+                <div class="about-logos">
+                    <img src="image-website/Abanse-Negrense-Logo-horizontal-Transparent 1.png" alt="abanse negrense" class="abanse">
+                    <img src="image-website/nolitc inspire 1.png" alt="nolitc" class="nolitc">
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="programs" class="programs">
         <h1 class="program">Programs</h1>
-
-        <div class="program-cards">
-            <div class="card">
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow left" aria-label="Scroll left">&#8249;</button>
+            <div class="program-cards">
+                <div class="card">
                     <img src="image-website/program 1.png" alt="TESDA Qualifications" class="tesda">
-                <h3>TESDA<br>Qualifications</h3>
-                <a href="{{route('tesda_qual')}}">See more</a>
-            </div>
-
-            <div class="card">
+                    <h3>TESDA<br>Qualifications</h3>
+                    <a href="{{route('tesda_qual')}}" class="program-btn"><button>See more</button></a>
+                </div>
+                <div class="card">
                     <img src="image-website/program 2.png" alt="TESDA Accredited Assessment Center" class="tesda">
-                <h3>TESDA Accredited <br> Assessment Center</h3>
-                <a href="#">See more</a>
-            </div>
-
-            <div class="card">
+                    <h3>TESDA Accredited <br> Assessment Center</h3>
+                    <a href="#" class="program-btn"><button>See more</button></a>
+                </div>
+                <div class="card">
                     <img src="image-website/program 3.png" alt="Special Programs" class="tesda">
-                <h3>Special <br> Programs</h3>
-                <a href="#">See more</a>
+                    <h3>Special <br> Programs</h3>
+                    <a href="#" class="program-btn"><button>See more</button></a>
+                </div>
             </div>
+            <button class="carousel-arrow right" aria-label="Scroll right">&#8250;</button>
         </div>
     </section>
 
@@ -57,30 +121,45 @@
                 <p>Talk Focusing Positive Mindset</p>
                 <span>May 7, 2024</span>
                 <a href="#" class="read">Read more</a>
-                <a href="#215th" class="previous round">&#8249;</a>
-                <a href="#216th" class="next round">&#8250;</a>
             </div>
 
             <div class="card" id="216th">
                 <img src="image-website/Mask group.png" alt="Update 2">
-                <p>NOLITC’s 216th Culmination Ceremony</p>
+                <p>NOLITC's 216th Culmination Ceremony</p>
                 <span>May 7, 2024</span>
                 <a href="#" class="read">Read more</a>
             </div>
 
             <div class="card" id="panaad">
                 <img src="image-website/Mask group (1).png" alt="Update 3">
-                <p>2nd Panaad sa Negros Festival: MLBB <br> Governor’s Cup Esports Competition 2024</p>
+                <p>2nd Panaad sa Negros Festival: MLBB <br> Governor's Cup Esports Competition 2024</p>
                 <span class="date">April 18, 2024</span>
                 <a href="#" class="more">Read more</a>
             </div>
 
             <div class="card" id="215th" >
                 <img src="image-website/mask group 2.jpg" alt="Update 4">
-                <p>NOLITC’s 215th Culmination Ceremony</p>
+                <p>NOLITC's 215th Culmination Ceremony</p>
                 <span>April 12, 2024</span>
                 <a href="#" class="read">Read more</a>
             </div>
+
+            <!-- Facebook Post Embed Example -->
+            <div class="card">
+                <div class="fb-post" data-href="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FNOLITC%2Fposts%2Fpfbid02example" data-width="400">
+                    <div class="fb-post-placeholder">
+                        <p>Facebook Post Loading...</p>
+                    </div>
+                </div>
+                <p>Latest Facebook Update</p>
+                <span>Recent</span>
+                <a href="#" class="read">View on Facebook</a>
+            </div>
+        </div>
+        
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="prevUpdate" aria-label="Previous update">&#8249;</button>
+            <button class="carousel-btn" id="nextUpdate" aria-label="Next update">&#8250;</button>
         </div>
     </div>
     </section>
@@ -166,3 +245,89 @@
     </section>
 
 @include('partials.frontend-footer')
+
+@push('scripts')
+@endpush
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all sections
+    const sections = document.querySelectorAll('.about, .programs, .updates, .scorecard, .partners');
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Observe card containers for staggered animations
+    const cardContainers = document.querySelectorAll('.program-cards, .update-cards, .scorecard-metrics, .partner-logos');
+    cardContainers.forEach(container => {
+        observer.observe(container);
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('.program-cards');
+    const leftBtn = document.querySelector('.carousel-arrow.left');
+    const rightBtn = document.querySelector('.carousel-arrow.right');
+    const scrollAmount = 340; // match card width
+
+    if (leftBtn && rightBtn && carousel) {
+        leftBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+        rightBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Updates carousel functionality
+    const updateCards = document.querySelector('.update-cards');
+    const prevBtn = document.getElementById('prevUpdate');
+    const nextBtn = document.getElementById('nextUpdate');
+    const scrollAmount = 420; // card width + gap
+
+    if (prevBtn && nextBtn && updateCards) {
+        prevBtn.addEventListener('click', () => {
+            updateCards.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            updateCards.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Update button states based on scroll position
+        updateCards.addEventListener('scroll', () => {
+            const isAtStart = updateCards.scrollLeft <= 0;
+            const isAtEnd = updateCards.scrollLeft >= updateCards.scrollWidth - updateCards.clientWidth;
+            
+            prevBtn.disabled = isAtStart;
+            nextBtn.disabled = isAtEnd;
+        });
+
+        // Initial button state
+        prevBtn.disabled = true;
+    }
+});
+</script>
+
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>

@@ -21,8 +21,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/delete-aplicant','deleteApplicant')->name('delete.applicant'); //delete student applicant data
         Route::put('/accept-aplicant','acceptApplicant')->name('accept.applicant'); //accept student applicant data
         Route::get('/printpdf/{id}','downloadPdf')->name('print.pdf'); //print student profile to pdf
-        Route::get('/upload-welcome/','upload_welcome')->name('upload-welcome'); //goto update welcome page
-        Route::put('/upload-cover/','upload_cover')->name('upload_cover'); //request update cover photo
+        Route::get('/intro-images','intro_images')->name('intro_images'); //goto intro images management
+        Route::get('/intro-images/form','intro_images_form')->name('intro_images_form'); //goto add intro image form
+        Route::post('/intro-images/add','add_intro_images')->name('add_intro_images'); //add new intro image
+        Route::delete('/intro-images/delete','delete_intro_image')->name('delete_intro_image'); //delete intro image
+        Route::put('/intro-images/order','update_intro_image_order')->name('update_intro_image_order'); //update intro image order
         Route::get('/program-management','program_management')->name('program_management'); //goto Program Managemant
         Route::get('/program-management/form','program_management_form')->name('programs'); //goto TESDA QUALIFICATIONS content
         Route::get('/program-management/addform','programs_addform')->name('programs_addform'); //goto add TESDA QUALIFICATIONS  form

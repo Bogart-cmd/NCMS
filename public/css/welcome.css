@@ -7,6 +7,8 @@
 html, body {
     max-width: 100vw;
     overflow-x: hidden;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: auto;
 }
 
 html {
@@ -188,25 +190,19 @@ nav a:hover {
 
 /* intro */
 .intro-text {
-    position: relative;
-    top: -240px;
-    z-index: 1;
-    text-align: center;
-    margin: 0 1rem;
+    position: static;
+    top: unset;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .intro-text::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 110%;
-    height: 120%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.2); 
-    backdrop-filter: blur(10px); 
-    border-radius: 10px;
-    z-index: -1;
+    content: none;
+    display: none;
 }
 
 .intro-text h1 {
@@ -227,113 +223,248 @@ nav a:hover {
     line-height: 1.3;
 }
 
-/* register button */
+.intro-btn {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 1rem;
+}
+
 .intro-btn button {
-    padding: clamp(0.8em, 2vw, 1em) clamp(1.5em, 4vw, 2.5em);
-    background-color: #168753;
+    padding: clamp(1em, 2.5vw, 1.2em) clamp(2em, 5vw, 3em);
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #ff6b35 100%);
     color: #fff;
     border: none;
     cursor: pointer;
-    font-size: clamp(1rem, 2.5vw, 1.2em);
-    margin-top: 1em;
-    border-radius: 10px;
+    font-size: clamp(1.1rem, 2.8vw, 1.4em);
+    font-weight: 700;
+    border-radius: 50px;
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -230px;
-    font-weight: bold;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    
-    animation: pulse 1.5s infinite ease-in-out;
+    overflow: hidden;
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4), 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.intro-btn button:hover { 
-    background-color: #0f6a3d;
-    transform: translateX(-50%) scale(1.1);
+.intro-btn button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
 }
 
-@keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.1); }
-    100% { transform: translateX(-50%) scale(1); }
+.intro-btn button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(255,255,255,0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.intro-btn button:hover {
+    background: linear-gradient(135deg, #ff5722 0%, #ff6b35 50%, #ff8c42 100%);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5), 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.15);
+    letter-spacing: 1px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.intro-btn button:hover::before {
+    left: 100%;
+}
+
+.intro-btn button:hover::after {
+    opacity: 1;
+}
+
+.intro-btn button:active {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4), 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease;
+}
+
+/* Add a subtle pulse animation to draw attention */
+.intro-btn button {
+    animation: subtlePulse 3s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+    0%, 100% {
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4), 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 12px 30px rgba(255, 107, 53, 0.5), 0 6px 15px rgba(0, 0, 0, 0.12), 0 0 0 4px rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Add a floating effect */
+.intro-btn button {
+    animation: subtlePulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
 }
 
 /* about */
-.span{
-    height: clamp(50px, 15vw, 100px);
-    width: clamp(100px, 30vw, 255px);
-    background-color: #168753;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-}
 .about {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: center; /* Changed from flex-start to center */
     justify-content: center;
-    padding: 2em 1em;
+    padding: 2em 1.5em;
     height: auto;
     position: relative;
-    min-height: 600px;
-    flex-direction: column;
+    min-height: 400px;
+    background: linear-gradient(135deg, #f8faf5 0%, #e8f5e8 100%);
 }
 
+.about-content {
+    display: flex;
+    align-items: center; /* Changed from flex-start to center */
+    justify-content: center; /* Changed from flex-start to center */
+    gap: clamp(1.5rem, 3vw, 3rem);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto; /* Center the content */
+    margin-bottom: 1rem;
+}
+
+.about-left {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center; /* Changed from flex-start to center */
+    justify-content: center; /* Changed from flex-start to center */
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Remove all existing mascot rules and replace with this single, clean rule */
 .about .mascot {
-    height: clamp(300px, 50vw, 650px);
-    margin-right: 0.5em;
-    position: relative;
-    top: -90px;
-    left: 0;
+    height: clamp(400px, 55vw, 500px) !important; /* Much bigger for testing */
     max-width: 100%;
+    object-fit: contain;
+    animation: fadeInLeft 1s ease-out;
+    align-self: center; /* Changed from flex-start to center */
+    justify-self: center; /* Changed from flex-start to center */
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.about-right {
+    flex: 1;
+    display: flex;
+    align-items: center; /* Changed from flex-start to center */
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: 700px;
+    animation: fadeInRight 1s ease-out 0.3s both;
+    height: clamp(80px, 15vw, 120px);
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.about-text-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem; /* Changed from 0.5rem */
+    height: 100%;
+    justify-content: center; /* Changed from space-between */
+    align-items: center; /* Added center alignment */
 }
 
 .about p {
-    max-width: 600px;
-    text-align: justify;
-    font-size: clamp(14px, 3vw, 20px);
-    position: relative;
-    top: -270px;
-    left: 0;
-    margin: 0 1rem;
+    text-align: justify; /* Justified text */
+    font-size: clamp(18px, 3vw, 20px); /* Increased from clamp(16px, 2.5vw, 20px) */
+    line-height: 1.4; /* Increased from 1.3 for better readability */
+    color: #1a1a1a; /* Darker color for better visibility */
+    margin: 0;
+    font-weight: 500; /* Increased from 500 for better visibility */
+    flex: 0 0 auto;
+    display: block;
+    align-items: center; /* Changed from flex-start to center */
+    margin-bottom: 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Added subtle text shadow */
 }
 
 .know {
-    position: relative;
-    padding: clamp(0.4em, 1.5vw, 0.5em) clamp(1em, 3vw, 1.5em);
-    left: 0;
-    top: -100px;
-    background-color: #168753;
+    padding: clamp(0.5em, 1.5vw, 0.8em) clamp(1.2em, 2.5vw, 1.5em); 
+    background: linear-gradient(135deg, #168753 0%, #22a06b 100%);
     border: none;
-    font-size: clamp(14px, 3vw, 19px);
-    border-radius: 5px;
+    font-size: clamp(16px, 2.5vw, 20px);
+    border-radius: 50px;
     color: white;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease; 
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(22, 135, 83, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0;
+    flex: 0 0 auto;
 }
 
 .know:hover {
-    background-color: #0f6a3d; 
-    transform: scale(1.05); 
-    cursor: pointer;
+    background: linear-gradient(135deg, #0f6a3d 0%, #168753 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 135, 83, 0.4);
 }
 
-.abanse{
-    position: relative;
-    left: 0;
-    top: 20px;
-    max-width: 100%;
-    height: auto;
+.about-logos {
+    display: flex;
+    flex-direction: column; /* This makes them stack vertically */
+    align-items: center;
+    justify-content: center;
+    gap: clamp(3rem, 6vw, 5rem); /* Much larger vertical gap */
+    animation: fadeInUp 1s ease-out 0.6s both;
+    height: 100%;
 }
 
-.nolitc{
-    position: absolute;
-    top: 70%;
-    left: 58%;
+.abanse {
+    height: clamp(25px, 4vw, 40px);
     max-width: 100%;
-    height: auto;
+    object-fit: contain;
+}
+
+.nolitc {
+    height: clamp(25px, 4vw, 40px);
+    max-width: 100%;
+    object-fit: contain;
 }
 
 /* programs */
@@ -353,50 +484,143 @@ nav a:hover {
     top: -50px;
 }
 
-.program-cards{
+.carousel-wrapper {
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: clamp(1em, 3vw, 2em);
-    height: auto;
-    flex-wrap: wrap;
-    padding: 0 1rem;
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overscroll-behavior-x: contain;
+    touch-action: pan-y;
 }
 
+.program-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 2rem 0;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #168753 #e8f5e8;
+    overscroll-behavior-x: contain; /* Allow vertical scroll to pass through */
+    touch-action: pan-y; /* Allow vertical scroll on touch devices */
+}
+
+.program-cards::-webkit-scrollbar {
+    height: 8px;
+}
+.program-cards::-webkit-scrollbar-thumb {
+    background: #168753;
+    border-radius: 4px;
+}
+.program-cards::-webkit-scrollbar-track {
+    background: #e8f5e8;
+}
+
+.program-cards .card {
+    min-width: 320px;
+    max-width: 340px;
+    flex: 0 0 auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(22,135,83,0.08);
+    padding: 1.5rem 1rem 2rem 1rem;
+    transition: transform 0.3s;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.program-cards .card .program-btn {
+    position: static;
+    align-self: flex-start;
+    margin-top: auto;
+    text-align: left;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.program-cards .card .program-btn button {
+    background: linear-gradient(135deg, #168753 0%, #22a06b 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6em 1.4em;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(22,135,83,0.08);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.program-cards .card .program-btn button:hover {
+    background: linear-gradient(135deg, #22a06b 0%, #168753 100%);
+    transform: translateY(-2px) scale(1.04);
+}
 
 .program-cards .card img {
     width: 100%;
-    height: auto;
-    position: relative;
-    top: -110px;
-    left: -20px;
-    max-width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
 }
 
-.program-cards::before{
- background-color: #0b5300;
- color: #0b5300;
+.carousel-arrow {
+    background: #168753;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 2rem;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    z-index: 2;
+    transition: background 0.2s;
+}
+.carousel-arrow:hover {
+    background: #22a06b;
+}
+
+@media (max-width: 900px) {
+    .program-cards .card {
+        min-width: 240px;
+        max-width: 260px;
+    }
+    .carousel-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 1.5rem;
+    }
 }
 
 .program-cards .card h3 {
     font-size: clamp(1rem, 3vw, 1.5em);
-    color: #ffffff;
-    position: relative;
-    top: -340px;
-    text-align: justify;
+    color: #168753;
+    position: static;
+    text-align: left;
     font-weight: 900;
-    left: 40px;
+    margin: 1rem 0 0.5rem 0;
+    left: unset;
+    top: unset;
 }
 
 .program-cards .card a {
-    color: #2c7b1f;
-    position: relative;
-    top: -330px;
-    text-decoration: none;
-    background-color: white;
-    font-weight: 900;
-    padding: 10px;
-    border-radius: 5px;
-    left: -160px;
+    position: static;
+    left: unset;
+    top: unset;
+    background: none;
+    color: inherit;
+    font-weight: inherit;
+    padding: 0;
+    border-radius: 0;
 }
 
 
@@ -444,31 +668,44 @@ nav a:hover {
 
 .update-cards {
     display: flex;
-    justify-content: center;
     gap: 1em;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1em 0;
     position: relative;
     top: -70px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.update-cards::-webkit-scrollbar {
+    display: none;
 }
 
 .update-cards .card {
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 1em;
-    max-width: 400px;
+    width: 400px;
+    min-width: 400px;
     height: auto;
     min-height: 400px;
-    flex: 1;
-    min-width: 280px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-cards .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .update-cards .card img {
-    width: 105%;
-    height: auto;
-    position: relative;
-    left: -13px;
-    border-radius: 10px;
-    max-width: 100%;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1em;
 }
 
 .update-cards .card p {
@@ -476,41 +713,107 @@ nav a:hover {
     color: #333;
     margin: 0.5em 0;
     font-weight: bolder;
-    width: 100%;
-    position: relative;
     text-align: left;
+    line-height: 1.4;
 }
 
 .update-cards .card span {
     font-size: clamp(0.8rem, 2vw, 0.9em);
     color: #999;
-    position: relative;
-    top: 20px;
-    left: -100px;
+    display: block;
+    margin-bottom: 1em;
+    text-align: left;
 }
 
-.update-cards .read {
+.update-cards .read,
+.update-cards .more {
     color: #ffffff;
     text-decoration: none;
-    background-color: green;
+    background-color: #168753;
     font-size: clamp(14px, 2.5vw, 17px);
-    position: relative;
-    top: 80px;
-    left: -185px;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
 }
 
-.more{
-    color: #ffffff;
-    text-decoration: none;
-    background-color: green;
-    font-size: clamp(14px, 2.5vw, 17px);
+.update-cards .read:hover,
+.update-cards .more:hover {
+    background-color: #22a06b;
+}
+
+.update-cards .fb-post {
+    width: 100%;
+    margin: 0;
+}
+
+.update-cards .fb-post iframe {
+    width: 100% !important;
+    height: 400px !important;
+    border: none;
+    border-radius: 8px;
+}
+
+.update-cards .fb-post-placeholder {
+    background: #f0f2f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2em;
+    text-align: center;
+    color: #666;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.updates .carousel-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
     position: relative;
-    top: 65px;
-    left: -190px;
-    padding: 5px;
-    border-radius: 5px;
+    top: -50px;
+}
+
+.updates .carousel-btn {
+    background: #168753;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.updates .carousel-btn:hover {
+    background: #22a06b;
+}
+
+.updates .carousel-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Smooth scrolling for all carousels */
+.program-cards,
+.update-cards {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars but maintain functionality */
+.program-cards::-webkit-scrollbar,
+.update-cards::-webkit-scrollbar {
+    display: none;
+}
+
+.program-cards,
+.update-cards {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 /* scorecard */
@@ -807,8 +1110,10 @@ a{
 .register{
     position: absolute;
     top: 25px;
-    font-size: clamp(30px, 8vw, 55px);
+    font-size: clamp(14px, 4vw, 20px); 
     left: 160px;
+    padding: 0.2em 1em;               
+    border-radius: 30px;               
 }
 
 .pic{
@@ -818,6 +1123,344 @@ a{
     top: 20px;
     max-width: 100%;
     height: auto;
+}
+
+/* Hero split intro section with animations */
+.hero-split {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-left, .hero-right {
+    flex: 1 1 50%;
+    width: 50%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.hero-left {
+    background: linear-gradient(135deg, #168753 0%, #38b87c 100%);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    min-height: 600px;
+    animation: slideInLeft 1.2s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem 3rem;
+    gap: 1.5rem;
+    height: 100%;
+    animation: fadeIn 1.5s ease-out 0.3s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content h1, .hero-content p, .hero-content .intro-btn {
+    color: #fff;
+    text-align: left;
+}
+
+.hero-content p {
+    opacity: 0.95;
+}
+
+.hero-content h1 {
+    animation: slideInUp 1.8s ease-out 0.5s both;
+}
+
+.hero-content p {
+    animation: slideInUp 1.8s ease-out 0.7s both;
+}
+
+.intro-btn {
+    animation: slideInUp 1.8s ease-out 0.9s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-right {
+    background: #f4f8ee;
+    position: relative;
+    z-index: 1;
+    animation: slideInRight 1.2s ease-out;
+    overflow: hidden;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-right .student {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: none;
+    max-height: none;
+    transition: all 0.8s ease-in-out;
+}
+
+/* Enhanced slideshow animations */
+.slideshow-image {
+    transition: opacity 0.8s ease-in-out;
+    animation: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.slideshow-image.fade-out {
+    opacity: 0;
+}
+
+.slideshow-image.fade-in {
+    opacity: 1;
+}
+
+/* Button hover animations */
+.intro-btn button {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.intro-btn button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 135, 83, 0.3);
+}
+
+.intro-btn button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.intro-btn button:hover::before {
+    left: 100%;
+}
+
+@media (max-width: 900px) {
+    .hero-split {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .hero-left, .hero-right {
+        width: 100%;
+        min-height: 50vh;
+    }
+    .hero-content {
+        align-items: flex-start;
+        text-align: left;
+        padding: 2rem;
+        height: 100%;
+        gap: 1rem;
+    }
+    .hero-content h1 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        line-height: 1.2;
+    }
+    .hero-content p {
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        line-height: 1.4;
+    }
+    .intro-btn {
+        margin-top: 1rem;
+    }
+    .intro-btn button {
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        padding: clamp(0.8em, 2vw, 1em) clamp(1.5em, 4vw, 2.5em);
+        min-width: 180px;
+    }
+    .hero-right .student {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-left, .hero-right {
+        min-height: 50vh;
+    }
+    .hero-content {
+        padding: 1.5rem;
+        gap: 0.8rem;
+    }
+    .hero-content h1 {
+        font-size: clamp(1.3rem, 5vw, 2rem);
+    }
+    .hero-content p {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
+    .intro-btn button {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        padding: clamp(0.7em, 2.5vw, 0.9em) clamp(1.2em, 4vw, 2em);
+        min-width: 160px;
+    }
+    .hero-right .student {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+@media (max-width: 900px) {
+    .about-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .about-left {
+        order: 1;
+        align-self: center;
+    }
+    
+    .about-right {
+        order: 2;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        height: auto;
+    }
+    
+    .about-text-section {
+        align-items: center;
+        height: auto;
+    }
+    
+    .about p {
+        text-align: justify;
+        align-items: center;
+    }
+    
+    .know {
+        align-self: center;
+    }
+    
+    .about-logos {
+        flex-direction: row; /* Horizontal on mobile */
+        gap: clamp(2rem, 5vw, 4rem); /* Large horizontal gap for mobile */
+        height: auto;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .about {
+        padding: 1.5em 1em;
+    }
+    
+    .about-content {
+        gap: 0.8rem;
+        align-items: flex-start;
+    }
+    
+    .about p {
+        font-size: clamp(16px, 4vw, 20px); /* Increased mobile text size */
+        align-items: center;
+        font-weight: 600;
+    }
+    
+    .know {
+        font-size: clamp(14px, 4vw, 18px); /* Increased mobile button text */
+        padding: clamp(0.4em, 2.5vw, 0.6em) clamp(1em, 3.5vw, 1.4em);
+        font-weight: 700;
+    }
+    
+    .about-logos {
+        gap: clamp(2.5rem, 8vw, 5rem); /* Even larger gap for small screens */
+    }
+    
+    .abanse, .nolitc {
+        height: clamp(20px, 6vw, 35px);
+    }
 }
 
 /* Mobile-first responsive design */
@@ -916,61 +1559,120 @@ a{
         transform: translateX(5px);
     }
     
-    .student {
-        max-height: 32vh;
-        margin-top: 10px;
-        margin-bottom: 0;
+    /* Hero section mobile styles */
+    .hero-split {
+        flex-direction: column;
+        min-height: 100vh;
     }
     
-    .intro-text {
-        top: -30px;
-        margin: 0 0.25rem;
-        padding: 0.25rem 0.5rem;
+    .hero-left, .hero-right {
+        width: 100%;
+        min-height: 50vh;
     }
     
-    .intro-text h1 {
-        font-size: 1.1rem;
-        margin-bottom: 0.3rem;
-        line-height: 1.1;
+    .hero-content {
+        align-items: flex-start;
+        text-align: left;
+        padding: 1.5rem;
+        height: 100%;
+        gap: 1rem;
     }
     
-    .intro-text p {
-        font-size: 0.9rem;
-        margin-bottom: 0.2rem;
+    .hero-content h1 {
+        font-size: clamp(1.4rem, 5vw, 2.2rem);
         line-height: 1.2;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-content p {
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+    }
+    
+    .intro-btn {
+        margin-top: 1rem;
+        width: 100%;
     }
     
     .intro-btn button {
-        /* Remove top offset */
-        top: unset;
-        font-size: 0.95rem;
-        padding: 0.5em 1.1em;
-        margin-top: 0.5em;
-        margin-bottom: 0;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        padding: clamp(0.8em, 2.5vw, 1em) clamp(1.5em, 4vw, 2.5em);
+        min-width: 160px;
+        width: auto;
+        /* Ensure button animations work on mobile */
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: subtlePulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
+    }
+    
+    .hero-right .student {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        /* Enhanced mobile image display */
+        min-height: 50vh;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
     }
     
     .about {
-        padding: 1em;
-        text-align: center;
+        padding: 1.5em 1em;
+        min-height: auto;
     }
     
-    .about .mascot {
-        height: clamp(200px, 40vw, 400px);
-        top: -50px;
+    .about-content {
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
+        align-items: flex-start;
+    }
+    
+    .about-left {
+        order: 1;
+        align-self: flex-start;
+        margin-left: 0;
+        padding-left: 0;
+    }
+    
+    .about-right {
+        order: 2;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 100%;
+        gap: 0.8rem;
+        height: auto;
+    }
+    
+    .about-text-section {
+        align-items: flex-start;
+        height: auto;
     }
     
     .about p {
-        top: -150px;
-        font-size: clamp(12px, 3vw, 16px);
-        margin: 0 0.5rem;
+        text-align: left;
+        font-size: clamp(14px, 3vw, 18px);
+        line-height: 1.3;
+        align-items: flex-start;
     }
     
     .know {
-        top: -50px;
+        align-self: flex-start;
         font-size: clamp(12px, 3vw, 16px);
+        padding: clamp(0.4em, 2.5vw, 0.6em) clamp(1em, 3.5vw, 1.4em);
+    }
+    
+    .about-logos {
+        flex-direction: row;
+        gap: clamp(1.2rem, 4vw, 2.2rem); /* Increased gap for mobile */
+        margin-top: 0;
+        height: auto;
+        justify-content: center;
+    }
+    
+    .abanse, .nolitc {
+        height: clamp(18px, 8vw, 30px);
     }
     
     .programs h1 {
@@ -1063,43 +1765,69 @@ a{
     .header-content {
         padding: 0.5rem;
         gap: 0.5rem;
-        flex-direction: row;
-        align-items: center;
     }
     
     .logo {
-        max-height: 45px;
-        flex-shrink: 0;
+        max-height: 40px;
     }
     
     h2 {
-        font-size: clamp(0.5rem, 2.2vw, 0.7rem);
+        font-size: clamp(0.5rem, 2vw, 0.8rem);
+    }
+    
+    /* Hero section for very small screens */
+    .hero-split {
+        min-height: 100vh;
+    }
+    
+    .hero-left, .hero-right {
+        min-height: 50vh;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    
+    .hero-content h1 {
+        font-size: clamp(1.2rem, 6vw, 1.8rem);
         line-height: 1.1;
-        flex: 1;
-        min-width: 0;
+        margin-bottom: 0.5rem;
     }
     
-    .student {
-        max-height: 50vh;
+    .hero-content p {
+        font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+        line-height: 1.3;
+        margin-bottom: 0.5rem;
     }
     
-    .intro-text {
-        top: -60px;
-        margin: 0 0.25rem;
-    }
-    
-    .intro-text h1 {
-        font-size: clamp(1rem, 4vw, 1.5rem);
-    }
-    
-    .intro-text p {
-        font-size: clamp(0.8rem, 2.5vw, 1rem);
+    .intro-btn {
+        margin-top: 0.8rem;
     }
     
     .intro-btn button {
-        top: -60px;
-        font-size: clamp(0.8rem, 2.5vw, 1rem);
-        padding: 0.6em 1.2em;
+        font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+        padding: clamp(0.7em, 3vw, 0.9em) clamp(1.2em, 5vw, 2em);
+        min-width: 140px;
+        /* Ensure animations work on small screens */
+        animation: subtlePulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
+    }
+    
+    .hero-right .student {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        /* Optimized for very small screens */
+        min-height: 50vh;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
+        /* Ensure image fills the entire container */
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
     }
 }
 
@@ -1173,10 +1901,6 @@ a{
         flex-wrap: wrap;
     }
     
-    .about .mascot {
-        height: clamp(300px, 40vw, 500px);
-    }
-    
     .program-cards {
         flex-wrap: wrap;
     }
@@ -1248,16 +1972,21 @@ a{
     }
     
     .about .mascot {
-        height: 650px;
-        left: 210px;
+        height: clamp(120px, 20vw, 180px); /* Bigger for large screens */
+        left: 0; /* Align to the left instead of 210px */
+        position: relative;
+        top: 0;
+        margin-left: 0;
     }
     
     .about p {
-        left: 210px;
+        left: 0; /* Remove the 210px offset */
+        position: relative;
     }
     
     .know {
-        left: -389px;
+        left: 0; /* Remove the -389px offset */
+        position: relative;
     }
     
     .program-cards {
@@ -1289,15 +2018,234 @@ a{
     }
 }
 
-/* Ensure all images on welcome page are responsive */
-.student,
-.partner-logos img,
-.update-cards .card img,
-.program-cards .card img,
-.about .mascot,
-.abanse,
-.nolitc {
+/* Scroll-triggered animations - FIXED VERSION */
+.about {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out;
+}
+
+.about.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.programs {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out;
+}
+
+.programs.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.program-cards {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out 0.3s;
+}
+
+.program-cards.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out 0.3s;
+}
+
+.updates {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out;
+}
+
+.updates.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.update-cards {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out 0.3s;
+}
+
+.update-cards.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out 0.3s;
+}
+
+.scorecard {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out;
+}
+
+.scorecard.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.scorecard-metrics {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out 0.3s;
+}
+
+.scorecard-metrics.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out 0.3s;
+}
+
+.partners {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out;
+}
+
+.partners.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out;
+}
+
+.partner-logos {
+    opacity: 1; /* Start visible */
+    transform: translateY(0); /* Start in position */
+    transition: all 0.8s ease-out 0.3s;
+}
+
+.partner-logos.animate {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideInFromBottom 0.8s ease-out 0.3s;
+}
+
+/* Staggered card animations */
+.program-cards .card,
+.update-cards .card {
+    opacity: 1; /* Start visible */
+    transform: translateY(0) scale(1); /* Start in position */
+    transition: all 0.6s ease-out;
+}
+
+.program-cards.animate .card,
+.update-cards.animate .card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: cardSlideIn 0.6s ease-out;
+}
+
+@keyframes cardSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.program-cards.animate .card:nth-child(1) { animation-delay: 0.1s; }
+.program-cards.animate .card:nth-child(2) { animation-delay: 0.15s; }
+.program-cards.animate .card:nth-child(3) { animation-delay: 0.2s; }
+
+.update-cards.animate .card:nth-child(1) { animation-delay: 0.4s; }
+.update-cards.animate .card:nth-child(2) { animation-delay: 0.5s; }
+.update-cards.animate .card:nth-child(3) { animation-delay: 0.6s; }
+.update-cards.animate .card:nth-child(4) { animation-delay: 0.7s; }
+
+/* Metric animations */
+.scorecard-metrics .metric {
+    opacity: 1; /* Start visible */
+    transform: translateY(0) scale(1); /* Start in position */
+    transition: all 0.6s ease-out;
+}
+
+.scorecard-metrics.animate .metric {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: metricSlideIn 0.6s ease-out;
+}
+
+@keyframes metricSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.scorecard-metrics.animate .metric:nth-child(1) { animation-delay: 0.4s; }
+.scorecard-metrics.animate .metric:nth-child(2) { animation-delay: 0.5s; }
+.scorecard-metrics.animate .metric:nth-child(3) { animation-delay: 0.6s; }
+
+/* Enhanced mascot animation */
+.about .mascot {
+    height: clamp(400px, 55vw, 500px) !important;
     max-width: 100%;
-    height: auto;
-    box-sizing: border-box;
+    object-fit: contain;
+    animation: fadeInLeft 1s ease-out;
+    align-self: center;
+    justify-self: center;
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-left: 0;
+    margin-right: auto;
+    transition: all 0.6s ease-out;
+}
+
+.about.animate .mascot {
+    animation: bounceIn 1.2s ease-out 0.3s both;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(-50px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Responsive: even smaller on mobile */
+@media (max-width: 600px) {
+    .register {
+        font-size: clamp(14px, 6vw, 22px);
+        padding: 0.25em 0.7em;
+    }
+}
+
+/* Remove or reduce these delays for instant animation */
+.program-cards,
+.update-cards,
+.scorecard-metrics,
+.partner-logos {
+    transition-delay: 0s !important;
+    /* or just remove any transition-delay/animation-delay properties */
+}
+
+/* For staggered cards/metrics, you can reduce the delay or remove it */
+.program-cards.animate .card,
+.update-cards.animate .card,
+.scorecard-metrics.animate .metric {
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
 }

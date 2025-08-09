@@ -13,6 +13,7 @@ use App\Models\Classification;
 use App\Models\Competencies;
 use App\Models\Contents;
 use App\Models\Images;
+use App\Models\IntroImage;
 use App\Models\Programs;
 use App\Models\Qualifications;
 use App\Models\ScoreCard;
@@ -206,38 +207,6 @@ class AdminController extends Controller
         //download pdf
         $pdf = Pdf::loadView('pdf.downloadPdf', ['data'=>$data])->setPaper('a4', 'portrait');
         return $pdf->download($student->fname." ".$student->lname.".pdf");
-    }
-
-    //goto update welcome
-    public function upload_welcome(){
-        
-        $content = Contents::find(1);
-        //if the image column in database is null the image display to default
-        if($content!=null){
-            return view("pages.adminwelcome", ['image'=>$content->images['0']]);
-        }else{
-            return view("pages.adminwelcome", ['image'=>'default.jpg']);
-        }
-    }
-
-    //update photo for welcome page to database 
-    public function upload_cover(Request $request){
-        $filename = '';
-        
-        if($request->hasFile("image_upload")){ //validation if the input file tag is not empty
-            $request->validate([ //required if the file is image and file size of image
-                'image_upload'=>'mimes:jpeg,png,bmp,tiff |max:4094',
-            ]);
-            //make unique name for image by using the date uploaded
-            $database = time().'.'.$request->image_upload->extension() ;
-            $filename = $request->getSchemeAndHttpHost(). '/assets/img/'.$database;
-            $request->image_upload->move(public_path('/assets/img/'), $filename);
-            //update data image in database
-            $content = Images::where('content_id','=','1')->first();
-            $content['image'] = $database;
-            $content->save();
-            return redirect()->back()->with('success','Update cover photo success');
-        }
     }
 
     //goto program management page
@@ -475,6 +444,55 @@ class AdminController extends Controller
         $content->save();
 
         return redirect()->back()->with('success', 'Welcome page updated successfully.');
+    }
+
+    //goto intro images page
+    public function intro_images(){
+        $introImages = IntroImage::all();
+        return view('pages.adminIntroImages', ['introImages'=>$introImages]);
+    }
+
+    //goto intro images form
+    public function intro_images_form(){
+        return view('pages.adminIntroImagesForm');
+    }
+
+    //add intro images logic
+    public function add_intro_images(Request $request){
+        $data = $request->validate([
+            'image'=> 'required|mimes:jpeg,png,bmp,tiff |max:4094',
+            'order'=> 'required|numeric'
+        ]);
+
+        $database = time().'.'.$data['image']->extension() ;
+        $filename = $request->getSchemeAndHttpHost(). '/assets/img/'.$database;
+        $data['image']->move(public_path('/assets/img/'), $filename);
+
+        IntroImage::create([
+            'image'=>$database,
+            'order'=>$data['order']
+        ]);
+
+        return redirect('intro-images')->with('success','Add Success');
+    }
+
+    //delete intro images logic
+    public function delete_intro_image(Request $request){
+        IntroImage::where('id','=',$request->intro_image_id)->delete();
+        return redirect('intro-images')->with('success','Delete Success');
+    }
+
+    //update intro image order logic
+    public function update_intro_image_order(Request $request){
+        $data = $request->validate([
+            'order'=> 'required|array'
+        ]);
+
+        foreach($data['order'] as $key => $value){
+            IntroImage::where('id','=',$value)->update(['order'=>$key]);
+        }
+
+        return redirect('intro-images')->with('success','Update Success');
     }
 
 }

@@ -72,11 +72,18 @@ nav a {
 }
 
 /* berto */
-.mascot {
-    height: 800px;
+.about .mascot {
+    height: clamp(200px, 35vw, 300px) !important; /* Much bigger for testing */
+    max-width: 100%;
+    object-fit: contain;
+    animation: fadeInLeft 1s ease-out;
+    align-self: flex-start;
+    justify-self: flex-start;
     position: relative;
-    top: 100px;
-    left: -600px;
+    left: 0;
+    top: 0;
+    margin-left: 0;
+    margin-right: auto;
 }
 
 /* history */

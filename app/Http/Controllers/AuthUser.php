@@ -167,7 +167,7 @@ class AuthUser extends Controller
     }
     //goto officer content
     public function officer(){
-        return redirect('/upload-welcome/')->with('success','Welcome Officer');
+        return redirect('/intro-images')->with('success','Welcome Officer');
     }
     //logout session
     public function signoutAction(Request $request){

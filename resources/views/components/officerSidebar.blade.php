@@ -46,7 +46,7 @@
             </a>
         </li>
         <li class="px-10 text-md text-[#fff] hover:bg-slate-600 py-1 rounded">
-            <a href="{{route('upload-welcome')}}">Update Welcome</a>
+            <a href="{{route('intro_images')}}">Manage Intro Images</a>
         </li>
         <li class="px-10 text-md text-[#fff] hover:bg-slate-600 py-1 rounded">
             <a href="{{route('program_management')}}">Program Management</a>
