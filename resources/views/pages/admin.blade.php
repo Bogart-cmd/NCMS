@@ -1,4 +1,12 @@
 @include('partials.header', ['title'=> 'Dashboard'])
+<style>
+  :root { 
+    --font-primary: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; 
+  }
+  html, body, button, input, select, textarea { 
+    font-family: var(--font-primary) !important; 
+  }
+</style>
 
 <x-adminHeader></x-adminHeader>
 <x-adminSidebar :user='auth()->user()->usertype'></x-adminSidebar>

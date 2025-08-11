@@ -8,6 +8,7 @@ use App\Models\Programs;
 use App\Models\ScoreCard;
 use App\Models\Contents; // FIX: Import the correct model
 use App\Models\IntroImage;
+use App\Models\Updates;
 use Illuminate\Http\Request;
 
 class NolitcController extends Controller
@@ -20,12 +21,14 @@ class NolitcController extends Controller
     public function welcome(){
         $intro_images = IntroImage::active()->ordered()->get();
         $score_card = ScoreCard::first();
-        $updates = Contents::latest()->take(4)->get(); 
+        $updates = Updates::latest()->take(4)->get(); 
+        $partners = Partners::orderBy('id','asc')->get();
 
         return view("welcome", [
             'datas' => $intro_images,
             'scoreCard' => $score_card,
-            'updates' => $updates 
+            'updates' => $updates,
+            'partners' => $partners
         ]);
     }
 

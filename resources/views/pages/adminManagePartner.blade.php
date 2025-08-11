@@ -42,7 +42,7 @@
                             </form>
                         </td>
                         <td>
-                            <button class="w-[80%] bg-[#168753] rounded-md text-white hover:bg-green-900 px-3 py-2">Update</button>
+                            <button type="button" data-partner='@json($partner)' class="update-partner-btn w-[80%] bg-[#168753] rounded-md text-white hover:bg-green-900 px-3 py-2">Update</button>
                         </td>
                     </tr>
                     @endforeach
@@ -73,6 +73,34 @@
             </div>
         </div>
     </section>
+    <!-- Update Partner Modal -->
+    <div id="updatePartnerModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+            <button id="closeUpdateModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">✕</button>
+            <h3 class="text-xl font-bold mb-4">Update Partner</h3>
+            <form id="updatePartnerForm" action="{{ route('update_partners') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="partners_id" id="update_partners_id">
+                <div class="flex flex-col gap-2">
+                    <label class="font-semibold">Current Logo</label>
+                    <img id="current_logo" src="" alt="Current Logo" class="w-32 h-auto rounded border" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="font-semibold">Replace Logo (optional)</label>
+                    <input type="file" name="image" accept="image/*" class="block w-full" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="font-semibold">Link</label>
+                    <input type="text" name="link" id="update_link" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Link" required>
+                </div>
+                <div class="flex gap-3 justify-end mt-2">
+                    <button type="button" id="cancelUpdateModal" class="px-4 py-2 rounded border">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded bg-[#168753] text-white hover:bg-green-900">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
 <script>
     function insertImage(){
@@ -93,5 +121,23 @@
                 }
             }
         });
+</script>
+<script>
+    // Update Partner modal logic
+    const modal = document.getElementById('updatePartnerModal');
+    const closeModal = () => modal.classList.add('hidden');
+    const openModal = () => modal.classList.remove('hidden');
+    document.getElementById('closeUpdateModal').addEventListener('click', closeModal);
+    document.getElementById('cancelUpdateModal').addEventListener('click', closeModal);
+
+    document.querySelectorAll('.update-partner-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const partner = JSON.parse(btn.getAttribute('data-partner'));
+            document.getElementById('update_partners_id').value = partner.id;
+            document.getElementById('update_link').value = partner.link || '';
+            document.getElementById('current_logo').src = `/assets/partners_logo/${partner.logo}`;
+            openModal();
+        });
+    });
 </script>
 @include('partials.footer')

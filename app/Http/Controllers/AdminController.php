@@ -17,6 +17,7 @@ use App\Models\IntroImage;
 use App\Models\Programs;
 use App\Models\Qualifications;
 use App\Models\ScoreCard;
+use App\Models\Updates;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Exports\StudentsExport;
@@ -392,16 +393,16 @@ class AdminController extends Controller
     //add partners data in database
     public function add_partners(Request $request){
         $data = $request->validate([
-            'image'=> 'mimes:jpeg,png,bmp,tiff |max:4094',
-            'link'=> 'required'
+            'image'=> 'required|mimes:jpeg,png,bmp,tiff|max:4094',
+            'link'=> 'required|string'
         ]);
 
-        $database = time().'.'.$data['image']->extension() ;
-        $filename = $request->getSchemeAndHttpHost(). 'assets/partners_logo/'.$database;
-        $data['image']->move(public_path('assets/partners_logo/'), $filename);
+        $database = time().'.'.$data['image']->extension();
+        // Store only the file name; files live in public/assets/partners_logo
+        $data['image']->move(public_path('assets/partners_logo/'), $database);
         Partners::create([
-            'logo'=>$database,
-            'link'=>$data['link']
+            'logo' => $database,
+            'link' => $data['link']
         ]);
 
         return redirect()->back()->with('success','Add success');
@@ -413,37 +414,320 @@ class AdminController extends Controller
         return redirect()->back()->with('success','Delete success');
     }
 
-    public function adminUpdates() 
-    {
-        // retrieve the current content
-        $content = \App\Models\Contents::find(1);
-        return view('pages.adminUpdates', compact('content'));
+    //update partner data in database
+    public function update_partners(Request $request){
+        $data = $request->validate([
+            'partners_id' => 'required|integer|exists:partners,id',
+            'link'        => 'required|string',
+            'image'       => 'nullable|mimes:jpeg,png,bmp,tiff|max:4094'
+        ]);
+
+        $partner = Partners::findOrFail($data['partners_id']);
+        $partner->link = $data['link'];
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $newName = time().'.'.$file->extension();
+            $file->move(public_path('assets/partners_logo/'), $newName);
+            $partner->logo = $newName;
+        }
+
+        $partner->save();
+        return redirect()->back()->with('success','Partner updated successfully');
     }
 
-    public function updateAdminUpdates(Request $request) 
+    public function adminUpdates() 
+    {
+        $updates = Updates::orderBy('date', 'desc')->get();
+        return view('pages.adminUpdates', compact('updates'));
+    }
+
+    public function getUpdate($id)
+    {
+        $update = Updates::findOrFail($id);
+        return response()->json($update);
+    }
+
+    public function addUpdate(Request $request) 
     {
         $data = $request->validate([
             'title'          => 'required|string|max:255',
             'content'        => 'required|string',
+            'date'           => 'required|date',
             'facebook_embed' => 'nullable|string',
             'image'          => 'nullable|mimes:jpeg,png,bmp,tiff|max:4094',
         ]);
 
-        $content = \App\Models\Contents::find(1) ?? new \App\Models\Contents();
-        $content->title = $data['title'];
-        $content->content = $data['content'];
-        $content->facebook_embed = $data['facebook_embed'] ?? null;
+        $update = new Updates();
+        $update->title = $data['title'];
+        $update->content = $data['content'];
+        $update->date = $data['date'];
+        $update->facebook_embed = $data['facebook_embed'] ?? null;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '.' . $file->extension();
             $file->move(public_path('assets/img/'), $filename);
-            $content->img_name = $filename;
+            $update->image = $filename;
         }
 
-        $content->save();
+        $update->save();
 
-        return redirect()->back()->with('success', 'Welcome page updated successfully.');
+        return redirect()->back()->with('success', 'Update added successfully.');
+    }
+
+    public function updateUpdate(Request $request, $id) 
+    {
+        $data = $request->validate([
+            'title'          => 'required|string|max:255',
+            'content'        => 'required|string',
+            'date'           => 'required|date',
+            'facebook_embed' => 'nullable|string',
+            'image'          => 'nullable|mimes:jpeg,png,bmp,tiff|max:4094',
+        ]);
+
+        $update = Updates::findOrFail($id);
+        $update->title = $data['title'];
+        $update->content = $data['content'];
+        $update->date = $data['date'];
+        $update->facebook_embed = $data['facebook_embed'] ?? null;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->extension();
+            $file->move(public_path('assets/img/'), $filename);
+            $update->image = $filename;
+        }
+
+        $update->save();
+
+        return redirect()->back()->with('success', 'Update updated successfully.');
+    }
+
+    public function deleteUpdate(Request $request) 
+    {
+        $update = Updates::findOrFail($request->update_id);
+        $update->delete();
+
+        return redirect()->back()->with('success', 'Update deleted successfully.');
+    }
+
+    public function toggleUpdateStatus(Request $request) 
+    {
+        $update = Updates::findOrFail($request->update_id);
+        $update->is_active = !$update->is_active;
+        $update->save();
+
+        return redirect()->back()->with('success', 'Update status updated successfully.');
+    }
+
+    public function parseFacebookEmbed(Request $request)
+    {
+        $embedCode = $request->input('facebook_embed');
+        
+        // Log the incoming embed code for debugging
+        \Log::info('Facebook embed parsing attempt', ['embed_code' => $embedCode]);
+        
+        // Extract Facebook post URL from embed code - handle both iframe and div formats
+        $postUrl = null;
+        
+        // Try iframe format first (src attribute)
+        if (preg_match('/src="([^"]+)"/', $embedCode, $matches)) {
+            $iframeSrc = $matches[1];
+            // Extract the href parameter from the iframe src
+            if (preg_match('/href=([^&]+)/', $iframeSrc, $hrefMatches)) {
+                $postUrl = urldecode($hrefMatches[1]);
+            }
+        }
+        
+        // Fallback to div format (href attribute)
+        if (!$postUrl && preg_match('/href="([^"]+)"/', $embedCode, $matches)) {
+            $postUrl = $matches[1];
+        }
+        
+        if (!$postUrl) {
+            \Log::warning('Could not extract Facebook post URL from embed code');
+            return response()->json(['error' => 'Could not extract Facebook post URL from embed code']);
+        }
+        
+        \Log::info('Extracted Facebook post URL', ['url' => $postUrl]);
+        
+        try {
+            // Use Facebook Graph API to get post details
+            $accessToken = env('FACEBOOK_ACCESS_TOKEN'); // You'll need to set this in .env
+            
+            if ($accessToken) {
+                // Extract post ID from URL
+                preg_match('/posts\/(\d+)/', $postUrl, $postMatches);
+                $postId = $postMatches[1] ?? null;
+                
+                if ($postId) {
+                    $graphUrl = "https://graph.facebook.com/v18.0/{$postId}?fields=message,created_time&access_token={$accessToken}";
+                    $response = file_get_contents($graphUrl);
+                    $data = json_decode($response, true);
+                    
+                    if (isset($data['message'])) {
+                        // Extract title from message (first line or first 100 characters)
+                        $lines = explode("\n", $data['message']);
+                        $title = trim($lines[0]);
+                        if (strlen($title) > 100) {
+                            $title = substr($title, 0, 100) . '...';
+                        }
+                        
+                        // Parse created_time
+                        $createdTime = new \DateTime($data['created_time']);
+                        $date = $createdTime->format('Y-m-d');
+                        
+                        return response()->json([
+                            'success' => true,
+                            'title' => $title,
+                            'date' => $date,
+                            'message' => $data['message']
+                        ]);
+                    }
+                }
+            }
+            
+            // Fallback: Try to extract basic info from embed code
+            $title = $this->extractTitleFromEmbed($embedCode);
+            $date = $this->extractDateFromEmbed($embedCode, $postUrl);
+            
+            // Try to extract more meaningful content from the URL
+            $content = $this->extractContentFromEmbed($embedCode, $postUrl);
+            
+            \Log::info('Using fallback parsing', ['title' => $title, 'date' => $date, 'content' => $content]);
+            
+            return response()->json([
+                'success' => true,
+                'title' => $title,
+                'date' => $date,
+                'message' => $content
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Facebook embed parsing error', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to parse Facebook post: ' . $e->getMessage()]);
+        }
+    }
+    
+    private function extractTitleFromEmbed($embedCode)
+    {
+        // Try to extract any text content from the embed
+        $text = strip_tags($embedCode);
+        $text = preg_replace('/\s+/', ' ', $text);
+        $text = trim($text);
+        
+        // Try to find meaningful content
+        if (preg_match('/class="[^"]*post_message[^"]*"[^>]*>([^<]+)/', $embedCode, $matches)) {
+            $text = trim($matches[1]);
+        } elseif (preg_match('/<div[^>]*>([^<]+)<\/div>/', $embedCode, $matches)) {
+            $text = trim($matches[1]);
+        }
+        
+        // Clean up the text
+        $text = preg_replace('/[^\w\s\-.,!?]/', '', $text);
+        $text = trim($text);
+        
+        // If we still don't have meaningful text, try to extract from URL parameters
+        if (empty($text) || strlen($text) < 5) {
+            if (preg_match('/href=([^&]+)/', $embedCode, $matches)) {
+                $url = urldecode($matches[1]);
+                // Extract domain or path info as title
+                $parsedUrl = parse_url($url);
+                if (isset($parsedUrl['path'])) {
+                    $path = trim($parsedUrl['path'], '/');
+                    if ($path) {
+                        // Extract page name from path (e.g., "Nolitcinspire" from "Nolitcinspire/posts/...")
+                        $pathParts = explode('/', $path);
+                        if (isset($pathParts[0]) && $pathParts[0] !== 'posts') {
+                            $pageName = $pathParts[0];
+                            // Clean up the page name
+                            $pageName = str_replace(['-', '_'], ' ', $pageName);
+                            $pageName = ucwords($pageName);
+                            
+                            // Check if it's a known page
+                            if (stripos($pageName, 'nolitc') !== false) {
+                                $text = 'NOLITC Update - ' . $pageName;
+                            } else {
+                                $text = 'Facebook Post from ' . $pageName;
+                            }
+                        } else {
+                            $text = 'Facebook Post';
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (strlen($text) > 100) {
+            $text = substr($text, 0, 100) . '...';
+        }
+        
+        return $text ?: 'Facebook Post';
+    }
+
+    private function extractDateFromEmbed($embedCode, $postUrl)
+    {
+        // Try to extract date from the URL if available
+        $date = null;
+        if (preg_match('/created_time=([^&]+)/', $postUrl, $matches)) {
+            $dateString = urldecode($matches[1]);
+            try {
+                $date = new \DateTime($dateString);
+                return $date->format('Y-m-d');
+            } catch (\Exception $e) {
+                \Log::warning('Could not parse date from URL: ' . $dateString, ['error' => $e->getMessage()]);
+            }
+        }
+
+        // Fallback to parsing the embed code itself
+        if (preg_match('/created_time=([^&]+)/', $embedCode, $matches)) {
+            $dateString = urldecode($matches[1]);
+            try {
+                $date = new \DateTime($dateString);
+                return $date->format('Y-m-d');
+            } catch (\Exception $e) {
+                \Log::warning('Could not parse date from embed code: ' . $dateString, ['error' => $e->getMessage()]);
+            }
+        }
+
+        return date('Y-m-d'); // Default to today
+    }
+
+    private function extractContentFromEmbed($embedCode, $postUrl)
+    {
+        // Try to extract meaningful content from the URL structure
+        $parsedUrl = parse_url($postUrl);
+        $content = '';
+        
+        if (isset($parsedUrl['path'])) {
+            $path = trim($parsedUrl['path'], '/');
+            $pathParts = explode('/', $path);
+            
+            if (isset($pathParts[0])) {
+                $pageName = $pathParts[0];
+                $pageName = str_replace(['-', '_'], ' ', $pageName);
+                $pageName = ucwords($pageName);
+                
+                if (stripos($pageName, 'nolitc') !== false) {
+                    $content = "This is an update from the {$pageName} Facebook page. ";
+                } else {
+                    $content = "This is a post from the {$pageName} Facebook page. ";
+                }
+                
+                // Add post type information
+                if (isset($pathParts[1]) && $pathParts[1] === 'posts') {
+                    $content .= "The post was shared on Facebook and can be viewed by clicking the 'View Post' button below.";
+                }
+            }
+        }
+        
+        // If we still don't have content, provide a generic message
+        if (empty($content)) {
+            $content = "This Facebook post has been embedded and can be viewed by clicking the 'View Post' button below.";
+        }
+        
+        return $content;
     }
 
     //goto intro images page

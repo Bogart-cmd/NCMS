@@ -17,6 +17,8 @@
         </div>
     </section>
 
+    <div class="section-separator" aria-hidden="true"><div class="line"></div></div>
+
     @if(count($datas) > 1)
     <style>
         .slideshow-image {
@@ -73,6 +75,8 @@
             </div>
             <div class="about-right">
                 <div class="about-text-section">
+                    <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot-inline">
+                    <h3 class="about-title">About NOLITC</h3>
                     <p>
                         The Negros Occidental Language and Information Technology Center (NOLITC) is a preferred human resource provider of leading Business Process Management companies in Negros Occidental. It is the only government-run language and IT center in Negros island, duly registered and accredited by TESDA. NOLITC is a talent development initiative of the Provincial Government of Negros Occidental geared towards poverty reduction in the countryside.
                     </p>
@@ -86,75 +90,71 @@
         </div>
     </section>
 
+    <div class="section-separator" aria-hidden="true"><div class="line"></div></div>
+
     <section id="programs" class="programs">
-        <h1 class="program">Programs</h1>
+        <h1 class="program">Our Programs</h1>
         <div class="carousel-wrapper">
             <button class="carousel-arrow left" aria-label="Scroll left">&#8249;</button>
             <div class="program-cards">
                 <div class="card">
                     <img src="image-website/program 1.png" alt="TESDA Qualifications" class="tesda">
                     <h3>TESDA<br>Qualifications</h3>
-                    <a href="{{route('tesda_qual')}}" class="program-btn"><button>See more</button></a>
+                    <a href="{{route('tesda_qual')}}" class="program-btn">See more</a>
                 </div>
                 <div class="card">
                     <img src="image-website/program 2.png" alt="TESDA Accredited Assessment Center" class="tesda">
                     <h3>TESDA Accredited <br> Assessment Center</h3>
-                    <a href="#" class="program-btn"><button>See more</button></a>
+                    <a href="#" class="program-btn">See more</a>
                 </div>
                 <div class="card">
                     <img src="image-website/program 3.png" alt="Special Programs" class="tesda">
                     <h3>Special <br> Programs</h3>
-                    <a href="#" class="program-btn"><button>See more</button></a>
+                    <a href="#" class="program-btn">See more</a>
                 </div>
             </div>
             <button class="carousel-arrow right" aria-label="Scroll right">&#8250;</button>
         </div>
     </section>
 
+    <div class="section-separator" aria-hidden="true"><div class="line"></div></div>
+
     <section id="updates" class="updates">
         <h1>NOLITC Updates</h1>
 
         <div class="carousel">
         <div class="update-cards">
-            <div class="card" id="mindset">
-                <img src="image-website/mask group 3.jpg" alt="Update 1">
-                <p>Talk Focusing Positive Mindset</p>
-                <span>May 7, 2024</span>
-                <a href="#" class="read">Read more</a>
-            </div>
-
-            <div class="card" id="216th">
-                <img src="image-website/Mask group.png" alt="Update 2">
-                <p>NOLITC's 216th Culmination Ceremony</p>
-                <span>May 7, 2024</span>
-                <a href="#" class="read">Read more</a>
-            </div>
-
-            <div class="card" id="panaad">
-                <img src="image-website/Mask group (1).png" alt="Update 3">
-                <p>2nd Panaad sa Negros Festival: MLBB <br> Governor's Cup Esports Competition 2024</p>
-                <span class="date">April 18, 2024</span>
-                <a href="#" class="more">Read more</a>
-            </div>
-
-            <div class="card" id="215th" >
-                <img src="image-website/mask group 2.jpg" alt="Update 4">
-                <p>NOLITC's 215th Culmination Ceremony</p>
-                <span>April 12, 2024</span>
-                <a href="#" class="read">Read more</a>
-            </div>
-
-            <!-- Facebook Post Embed Example -->
-            <div class="card">
-                <div class="fb-post" data-href="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FNOLITC%2Fposts%2Fpfbid02example" data-width="400">
-                    <div class="fb-post-placeholder">
-                        <p>Facebook Post Loading...</p>
-                    </div>
+            @forelse($updates as $update)
+                <div class="card" id="update-{{ $update->id }}">
+                    @if($update->image)
+                        <img src="{{ asset('assets/img/' . $update->image) }}" alt="{{ $update->title }}">
+                    @elseif($update->facebook_embed)
+                        <div class="facebook-embed-container">
+                            {!! $update->facebook_embed !!}
+                        </div>
+                    @else
+                        <div class="no-image-placeholder">
+                            <p>No Image</p>
+                        </div>
+                    @endif
+                    <p>{{ $update->title }}</p>
+                    <span>{{ $update->formatted_date }}</span>
+                    @if($update->facebook_embed)
+                        <a href="#" class="read" onclick="openFacebookPost('{{ $update->facebook_embed }}')">View on Facebook</a>
+                    @else
+                        <a href="#" class="read">Read more</a>
+                    @endif
                 </div>
-                <p>Latest Facebook Update</p>
-                <span>Recent</span>
-                <a href="#" class="read">View on Facebook</a>
-            </div>
+            @empty
+                <div class="card">
+                    <div class="no-image-placeholder">
+                        <p>No Updates Available</p>
+                    </div>
+                    <p>No updates at the moment</p>
+                    <span>Check back later</span>
+                    <a href="#" class="read">Stay tuned</a>
+                </div>
+            @endforelse
         </div>
         
         <div class="carousel-controls">
@@ -164,83 +164,57 @@
     </div>
     </section>
 
+    <div class="section-separator" aria-hidden="true"><div class="line"></div></div>
+
     <section id="scorecard" class="scorecard">
-        <h1>Our score card</h1>
-        <div class="scorecard-metrics">
-            <div class="metric">
-                <h3>{{$scoreCard->number_of_graduates}}</h3>
-                <p>Graduates</p>
-            </div>
-            <div class="metric">
-                <h3>{{$scoreCard->number_of_employed}}</h3>
-                <p>Employed</p>
-            </div>
-            <div class="metric">
-                <h3>{{$scoreCard->employment_rate}}%</h3>
-                <p>Employment Rate</p>
+        <div class="container">
+            <h1>Our Success Metrics</h1>
+            <div class="scorecard-metrics">
+                <div class="metric">
+                    <div class="metric-icon">🎓</div>
+                    <h3>{{$scoreCard->number_of_graduates}}</h3>
+                    <p>Graduates</p>
+                    <div class="metric-subtitle">Successfully completed programs</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-icon">💼</div>
+                    <h3>{{$scoreCard->number_of_employed}}</h3>
+                    <p>Employed</p>
+                    <div class="metric-subtitle">Currently working professionals</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-icon">📈</div>
+                    <h3>{{$scoreCard->employment_rate}}%</h3>
+                    <p>Employment Rate</p>
+                    <div class="metric-subtitle">Graduates successfully employed</div>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="partners" class="partners">
-        <h1>Our partners</h1>
+        <h1>Our Partners</h1>
         <div class="partner-logos">
+            @php
+                // chunk partners into groups of 4, to preserve the current 4-per-slide design
+                $partnerChunks = $partners->chunk(4);
+            @endphp
 
+            @foreach($partnerChunks as $chunk)
             <div class="mySlides fade">
-                <a href="https://www.negros-occ.gov.ph/abanse-negrense/"><img src="image-website/abanse.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.deped.gov.ph/"><img src="image-website/education.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.tesda.gov.ph/"><img src="image-website/tesda.png" alt="Partner 1" class="image1"></a>
-                <a href="https://dict.gov.ph/"><img src="image-website/dict.png" alt="Partner 1" class="image1"></a>
+                @foreach($chunk as $partner)
+                    <a href="{{ $partner->link }}" target="_blank" rel="noopener">
+                        <img src="{{ asset('assets/partners_logo/' . $partner->logo) }}" alt="Partner" class="image1">
+                    </a>
+                @endforeach
             </div>
+            @endforeach
 
-            <div class="mySlides fade">
-                <a href="https://tech4edcenters.wordpress.com/what-is-tech4ed/"><img src="image-website/tech4ed.png" alt="Partner 1" class="image1"></a>
-                <a href="https://nt.gov.au/"><img src="image-website/northern.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.hugedomains.com/domain_profile.cfm?d=bnefit.com"><img src="image-website/bnefit.png" alt="Partner 1" class="image1"></a>
-                <a href="https://afs.org/"><img src="image-website/afs.png" alt="Partner 1" class="image1"></a>
+            <div style="text-align:center">
+                @for($i = 0; $i < max(1, $partnerChunks->count()); $i++)
+                    <span class="dot"></span>
+                @endfor
             </div>
-
-            <div class="mySlides fade">
-                <a href="https://www.animationcouncil.org/"><img src="image-website/acpi.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.facebook.com/OutdoMediaSolutions/"><img src="image-website/outdo.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.tooncityanimation.com/Home.php"><img src="image-website/toon.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.coderstribe.net/"><img src="image-website/coders tribe.png" alt="Partner 1" class="image1"></a>
-            </div>
-
-            <div class="mySlides fade">
-                <a href="https://www.facebook.com/stratiumsoftware/"><img src="image-website/stratium.png" alt="Partner 1" class="image1"></a>
-                <a href="https://transcom.com/"><img src="image-website/transcom.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.linkedin.com/company/arbcallfacilitiesinc"><img src="image-website/arb.png" alt="Partner 1" class="image1"></a>
-            </div>
-
-            <div class="mySlides fade">
-                <a href="https://www.ttec.com/"><img src="image-website/teletech.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.panasiaticsolutions.com/"><img src="image-website/panasiatic.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.concentrix.com/"><img src="image-website/concentrix.png" alt="Partner 1" class="image1"></a>
-            </div>
-
-            <div class="mySlides fade">
-                <a href="https://www.focusservices.com/"><img src="image-website/focus.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.iqor.com/"><img src="image-website/iqor.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.ubiquity.com/"><img src="image-website/ubiq.png" alt="Partner 1" class="image1"></a>
-            </div>
-
-            <div class="mySlides fade">
-                <a href="https://www.servicefirstcx.com/"><img src="image-website/service.png" alt="Partner 1" class="image1"></a>
-                <a href="https://www.teleperformance.com/"><img src="image-website/teleporformance.png" alt="Partner 1" class="image1"></a>
-            </div>
-
-
-            <div style="text-align:center" >
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-
         </div>
     </section>
 
@@ -283,16 +257,98 @@ document.addEventListener('DOMContentLoaded', function() {
     const carousel = document.querySelector('.program-cards');
     const leftBtn = document.querySelector('.carousel-arrow.left');
     const rightBtn = document.querySelector('.carousel-arrow.right');
-    const scrollAmount = 340; // match card width
+    const getScrollAmount = () => {
+        if (!carousel) return 0;
+        const firstCard = carousel.querySelector('.card');
+        if (!firstCard) return 0;
+        const cardStyles = window.getComputedStyle(firstCard);
+        const cardWidth = firstCard.getBoundingClientRect().width;
+        const gap = parseFloat(window.getComputedStyle(carousel).gap || '0');
+        return Math.ceil(cardWidth + gap);
+    };
+    let programAutoScrollId;
 
-    if (leftBtn && rightBtn && carousel) {
+    // Only enable horizontal carousel behavior on tablet/desktop
+    const enableCarousel = () => window.matchMedia('(min-width: 768px)').matches;
+
+    const setupCarousel = () => {
+        if (!carousel || !leftBtn || !rightBtn) return;
+        if (!enableCarousel()) return; // skip on mobile where cards stack vertically
+
+        // Disable arrows and auto-scroll when content fits without horizontal scroll
+        const updateControlsVisibility = () => {
+            const needsScroll = carousel.scrollWidth > carousel.clientWidth + 1;
+            leftBtn.style.display = needsScroll ? '' : 'none';
+            rightBtn.style.display = needsScroll ? '' : 'none';
+            if (!needsScroll && programAutoScrollId) {
+                clearInterval(programAutoScrollId);
+                programAutoScrollId = null;
+            }
+        };
+
+        // Initial state
+        updateControlsVisibility();
+
         leftBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+            if (carousel.scrollLeft <= 0) {
+                carousel.scrollTo({ left: maxScrollLeft, behavior: 'auto' });
+            } else {
+                carousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+            }
         });
+
         rightBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+            const nearEnd = carousel.scrollLeft >= (maxScrollLeft - 1);
+            if (nearEnd) {
+                carousel.scrollTo({ left: 0, behavior: 'auto' });
+            } else {
+                carousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            }
         });
-    }
+
+        const startProgramAutoScroll = () => {
+            stopProgramAutoScroll();
+            programAutoScrollId = setInterval(() => {
+                const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+                const atEnd = carousel.scrollLeft >= (maxScrollLeft - 1);
+                if (atEnd) {
+                    carousel.scrollTo({ left: 0, behavior: 'auto' });
+                } else {
+                    const nextLeft = Math.min(carousel.scrollLeft + getScrollAmount(), maxScrollLeft);
+                    carousel.scrollTo({ left: nextLeft, behavior: 'smooth' });
+                }
+            }, 3500);
+        };
+
+        const stopProgramAutoScroll = () => {
+            if (programAutoScrollId) clearInterval(programAutoScrollId);
+        };
+
+        startProgramAutoScroll();
+
+        ['mouseenter', 'focusin', 'touchstart'].forEach(evt => {
+            carousel.addEventListener(evt, stopProgramAutoScroll, { passive: true });
+        });
+        ['mouseleave', 'focusout', 'touchend'].forEach(evt => {
+            carousel.addEventListener(evt, startProgramAutoScroll, { passive: true });
+        });
+
+        // Re-check on resize or content changes
+        window.addEventListener('resize', updateControlsVisibility, { passive: true });
+        const resizeObserver = new ResizeObserver(updateControlsVisibility);
+        resizeObserver.observe(carousel);
+    };
+
+    setupCarousel();
+    // Re-evaluate on resize/orientation change
+    window.addEventListener('resize', () => {
+        if (!enableCarousel() && programAutoScrollId) {
+            clearInterval(programAutoScrollId);
+            programAutoScrollId = null;
+        }
+    }, { passive: true });
 });
 </script>
 
@@ -303,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = document.getElementById('prevUpdate');
     const nextBtn = document.getElementById('nextUpdate');
     const scrollAmount = 420; // card width + gap
+    let updatesAutoScrollId;
 
     if (prevBtn && nextBtn && updateCards) {
         prevBtn.addEventListener('click', () => {
@@ -324,10 +381,85 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Initial button state
         prevBtn.disabled = true;
+
+        // Auto-scroll updates carousel
+        const startUpdatesAutoScroll = () => {
+            stopUpdatesAutoScroll();
+            updatesAutoScrollId = setInterval(() => {
+                const maxScrollLeft = updateCards.scrollWidth - updateCards.clientWidth;
+                const atEnd = updateCards.scrollLeft >= (maxScrollLeft - 1);
+                const nextLeft = atEnd ? 0 : Math.min(updateCards.scrollLeft + scrollAmount, maxScrollLeft);
+                updateCards.scrollTo({ left: nextLeft, behavior: 'smooth' });
+            }, 4000);
+        };
+
+        const stopUpdatesAutoScroll = () => {
+            if (updatesAutoScrollId) clearInterval(updatesAutoScrollId);
+        };
+
+        startUpdatesAutoScroll();
+
+        // Pause on hover/focus, resume on leave/blur
+        ['mouseenter', 'focusin', 'touchstart'].forEach(evt => {
+            updateCards.addEventListener(evt, stopUpdatesAutoScroll, { passive: true });
+        });
+        ['mouseleave', 'focusout', 'touchend'].forEach(evt => {
+            updateCards.addEventListener(evt, startUpdatesAutoScroll, { passive: true });
+        });
     }
 });
+
+// Function to open Facebook posts
+function openFacebookPost(embedCode) {
+    // Extract the Facebook post URL from the embed code
+    const urlMatch = embedCode.match(/href="([^"]+)"/);
+    if (urlMatch && urlMatch[1]) {
+        window.open(urlMatch[1], '_blank');
+    } else {
+        // Fallback: try to find any URL in the embed code
+        const urlRegex = /https:\/\/[^\s"<>]+/;
+        const match = embedCode.match(urlRegex);
+        if (match) {
+            window.open(match[0], '_blank');
+        }
+    }
+}
 </script>
 
 <!-- Facebook SDK -->
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Re-initialize Facebook embeds after page load
+    if (typeof FB !== 'undefined') {
+        FB.XFBML.parse();
+    } else {
+        // If FB SDK hasn't loaded yet, wait for it
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '', // Leave empty if you don't have an app ID
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0'
+            });
+            FB.XFBML.parse();
+        };
+    }
+    
+    // Also re-parse when updates are loaded dynamically
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && typeof FB !== 'undefined') {
+                FB.XFBML.parse();
+            }
+        });
+    });
+    
+    const updateCards = document.querySelector('.update-cards');
+    if (updateCards) {
+        observer.observe(updateCards, { childList: true, subtree: true });
+    }
+});
+</script>
