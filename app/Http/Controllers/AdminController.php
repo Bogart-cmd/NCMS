@@ -212,7 +212,8 @@ class AdminController extends Controller
 
     //goto program management page
     public function program_management(){
-        return view('pages.adminprogrammanagemant');
+        $programs = Programs::orderBy('id', 'DESC')->paginate(12);
+        return view('pages.adminprogrammanagemant', ['programs' => $programs]);
     }
 
     //goto program management form
@@ -732,7 +733,7 @@ class AdminController extends Controller
 
     //goto intro images page
     public function intro_images(){
-        $introImages = IntroImage::all();
+        $introImages = IntroImage::orderBy('order', 'asc')->get();
         return view('pages.adminIntroImages', ['introImages'=>$introImages]);
     }
 
@@ -752,9 +753,18 @@ class AdminController extends Controller
         $filename = $request->getSchemeAndHttpHost(). '/assets/img/'.$database;
         $data['image']->move(public_path('/assets/img/'), $filename);
 
+        // Ensure unique ordering: shift existing items at or after desired order safely
+        $desiredOrder = (int) $data['order'];
+        $toShift = IntroImage::where('order', '>=', $desiredOrder)
+            ->orderBy('order', 'desc')
+            ->get(['id','order']);
+        foreach ($toShift as $row) {
+            IntroImage::where('id', $row->id)->update(['order' => $row->order + 1]);
+        }
+
         IntroImage::create([
-            'image'=>$database,
-            'order'=>$data['order']
+            'image' => $database,
+            'order' => $desiredOrder,
         ]);
 
         return redirect('intro-images')->with('success','Add Success');
@@ -772,11 +782,28 @@ class AdminController extends Controller
             'order'=> 'required|array'
         ]);
 
-        foreach($data['order'] as $key => $value){
-            IntroImage::where('id','=',$value)->update(['order'=>$key]);
+        // Two-phase update to avoid unique constraint violations
+        $idsInOrder = array_values($data['order']);
+        $tempBase = 100000;
+        foreach ($idsInOrder as $index => $id) {
+            IntroImage::where('id', '=', $id)->update(['order' => $tempBase + $index]);
+        }
+        foreach ($idsInOrder as $index => $id) {
+            IntroImage::where('id', '=', $id)->update(['order' => $index]);
         }
 
         return redirect('intro-images')->with('success','Update Success');
+    }
+
+    // Renumber intro images sequentially (0..N-1)
+    public function renumber_intro_images(){
+        $images = IntroImage::orderBy('order', 'asc')->get();
+        $index = 0;
+        foreach ($images as $image) {
+            $image->order = $index++;
+            $image->save();
+        }
+        return redirect('intro-images')->with('success','Order renumbered');
     }
 
 }

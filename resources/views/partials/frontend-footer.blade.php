@@ -1,11 +1,11 @@
-    <footer class="footer">
+    <footer class="footer site-footer">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="image-website/phil-seal 1.png" alt="Philippine Seal" class="pic">
+                <img src="{{ asset('image-website/phil-seal 1.png') }}" alt="Philippine Seal" class="pic">
             </div>
             <div class="footer-col">
                 <h3 class="ph">ABOUT GOV.PH</h3>
-                <p class="learn">Learn more about Philippine Goverment, its<br>structure, how government works and the<br>people behind it</p>
+                <p class="learn">Learn more about Philippine Government, its<br>structure, how the government works and the<br>people behind it</p>
                 <div class="gov-minor">
                     <p class="gov1">GOV.PH</p>
                     <p class="gov2">Open Data Patrol</p>
@@ -35,10 +35,13 @@
         </div>
     </footer>
 
+    <!-- Global header behavior and back-to-top -->
+    <script src="{{ asset('js/header.js') }}?v={{ time() }}" defer></script>
+
     @if(isset($js_file))
-        <script src="{{ $js_file }}"></script>
+        <script src="{{ $js_file }}?v={{ time() }}" defer></script>
     @else
-        <script src="js/welcome.js"></script>
+        <script src="{{ asset('js/welcome.js') }}?v={{ time() }}" defer></script>
     @endif
 </body>
 </html> 

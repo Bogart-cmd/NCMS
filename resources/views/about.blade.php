@@ -1,13 +1,13 @@
-@include('partials.frontend-header', ['title' => 'KNOW MORE', 'css_file' => 'css/about.css', 'show_hamburger' => false])
+@include('partials.frontend-header', ['title' => 'Know More', 'css_file' => '/css/about.css', 'show_hamburger' => true])
 
-    <div class="container">
-        <div class="nolitc">
-        <h1>NOLITC</h1>
-        <a href="/"><img src="image-website/Polygon 1.png" alt="polygon" class="polygon"></a>
-    </div>
+    <div class="header-title">
+        <a href="{{ route('welcome') }}" class="back-btn" aria-label="Back to Home"><span aria-hidden="true">←</span> Back to Home</a>
+        <h1>About NOLITC</h1>
     </div>
 
-    <div class="history">
+    <main class="about-wrapper">
+
+    <div class="history about-card">
         <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot">
         <h2 class="nolitic">HISTORY OF NOLITC</h2>
         <p class="address">To address the gap in the human resource requirements of BPO companies relocating in Negros Occidental, the provincial government under the leadership of the late Governor Joseph G. Marañon established the Negros Occidental Language and Information Technology Center in 2008. It was created pursuant to Sangguniang Panlalawigan Ordinance No. 001, series of 2008.With Marañon’s untimely demise in March 12, 2009, former Governor Isidro P. Zayco took over and continued the legacy program of his predecessor.The training center was inaugurated in September 15, 2009 as a division under the Economic Enterprise Development Department of the Provincial Government.
@@ -20,22 +20,24 @@
 
         <hr class="line">
 
-        <div class="vision">
+        <div class="about-grid">
+        <div class="vision about-card">
             <img src="image-website/logo.png" alt="NOLITC LOGO" class="bert">
             <h1>Vision</h1>
             <p>A leading institution that inspires to provide relevant and technology-driven human resource programs; promotes <b>GENDER RESPONSIVE SERVICES</b> and produces globally-ready workforce in various competitive industries.</p>
         </div>
 
-        <div class="mission">
+        <div class="mission about-card">
             <img src="image-website/logo.png" alt="NOLITC LOGO" class="logo">
             <h1>Mission</h1>
             <p>A leading institution that nurtures and empowers globally competitive workplace; helps build a <b>GENDER-FAIR SOCIETY</b> and enables inclusive and sustainable growth by 2030.</p>
 
         </div>
+        </div>
 
         <hr class="line1">
 
-        <div class="core">
+        <div class="core about-card">
             <img src="image-website/logo.png" alt="NOLITC LOGO" class="nolitc">
             <h1 class="values">Core Values</h1>
             <h3>NOLITC INSPIRE</h3>
@@ -54,7 +56,8 @@
 
         <hr class="line2">
 
-        <div class="qualobj">
+        <div class="about-grid">
+        <div class="qualobj about-card">
             <h1 class="objectives">Quality Objectives</h1>
             <p>
                 To enhance the knowledge, skills and attitudes of young Negrenses, particularly students in public schools and out-of-school youth, in the utilization of information and communication technology (ICT);
@@ -65,7 +68,7 @@
             <p>To strengthen and increase human resource and development linkages with local and international organizations.</p>
         </div>
 
-        <div class="qualstate">
+        <div class="qualstate about-card">
             <h1 class="statement">Quality Statement</h1>
             <p>NOLITC commits to deliver quality service to its clientele through : </p>
             <h3><b>CARES</b></h3>
@@ -77,5 +80,8 @@
                 <li><b>S</b>ervices</li>
             </ul>
         </div>
+        </div>
+
+    </main>
 
 @include('partials.frontend-footer')

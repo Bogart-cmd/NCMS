@@ -1,68 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/thank_you.css">
-    <link rel="icon" type="image/x-icon" href="/images/nolitc.png">
-    <title>Thank You</title>
-</head>
-<body>
-    <header>
-        <div class="header-content">
-            <img src="image-website/logo.png" alt="NOLITC Logo" class="logo">
-            <h2>NEGROS OCCIDENTAL LANGUANGE <br>AND INFORMATION TECHNOLOGY  CENTER</h2>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav id="nav-menu">
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#programs">Programs</a></li>
-                    <li><a href="#updates">Updates</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+@include('partials.frontend-header', [
+    'show_hamburger' => true,
+    'css_file' => '/css/thank_you.css',
+    'title' => 'Thank You'
+])
 
-    <div class="container">
-        <img src="image-website/mascot.png" alt="Thank You">
-        <h1>Thank you!</h1>
-        <h3>Your registration has been successfully submitted.</h3>
-        <h3>Please check your Email for the examination link!</h3>
-        <a href="{{route('welcome')}}" class="btn">Back to home</a>
+<main class="thankyou-container">
+    <img src="{{ asset('image-website/mascot.png') }}" alt="NOLITC Mascot">
+    <h1>Thank you!</h1>
+    <h3>Your registration has been successfully submitted.</h3>
+    <h3>Please check your Email for the examination link!</h3>
+    <a href="{{ route('welcome') }}" class="btn">Back to home</a>
+    
+    {{-- Optional: quick links back to sections on the homepage --}}
+    <div class="quick-links" aria-hidden="true">
+        <a href="/\#programs">See Programs</a>
+        <span class="sep">•</span>
+        <a href="/\#updates">Latest Updates</a>
     </div>
+    
+    {{-- Decorative separator --}}
+    <div class="thankyou-separator" aria-hidden="true"><div class="line"></div></div>
+    
+    {{-- Success note --}}
+    <p class="note">A confirmation email has been sent to your inbox.</p>
+</main>
 
-    <footer class="footer">
-        <h3 class="republic">REPUBLIC OF THE PHILIPPINES</h3><br>
-        <p class="content">All content is the public domain unless<br>otherwise stated</p>
-
-        <h3 class="ph">ABOUT GOV.PH</h3><br>
-        <p class="learn">Learn more about Philippine Goverment, its<br>structure, how government works and the<br>people behind it</p>
-        <p class="gov1">GOV.PH</p>
-        <p class="gov2">Open Data Patrol</p>
-        <p class="gov3">Official Gazettte</p>
-
-        <h3 class="goverment">GOVERMENT LINKS</h3>
-        <div class="links">
-          <a href="https://op-proper.gov.ph/" class="pres">Office of the President</a>
-          <a href="https://www.ovp.gov.ph/" class="vice">Office of the Vice President</a>
-          <a href="https://legacy.senate.gov.ph/" class="senate">Senate of the Philippines</a>
-          <a href="https://www.congress.gov.ph/" class="house">House of the Representative</a>
-          <a href="https://sc.judiciary.gov.ph/" class="supreme">Supreme Court</a>
-          <a href="https://ca.judiciary.gov.ph/" class="appeals">Court of Appeals</a>
-          <a href="https://sb.judiciary.gov.ph/" class="sandigan">Sandigan Bayan</a>
-          <a href="https://www.negros-occ.gov.ph/" class="negros">Province of Negros Occidental</a>
-
-          <h3 class="visit">Visit Us</h3>
-          <p class="paglaum">Paglaum Sports Complex<br>Hernaez St.Bacolod City,<br>Negros Occidental</p>
-          <p class="phone">Telephone: (034) 435 6092<br>Email: nolitc@gmail.com</p>
-          <img src="image-website/phil-seal 1.png" alt="logo" class="pic">
-        </div>
-    </footer>
-</body>
-</html>
+@include('partials.frontend-footer')

@@ -1,61 +1,24 @@
-{{-- @dd($programs) --}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/register.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="css/register.css">
-  <link rel="icon" type="image/x-icon" href="../images/nolitc.png">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <title>Registration Form</title>
-</head>
+@include('partials.frontend-header', ['title' => 'Registration Form', 'css_file' => '/css/register.css', 'show_hamburger' => true])
 @if(!old('lname'))
   <script>
-    localStorage.removeItem('privacyAccepted'); //this script is so that privacy policy no longer shows once "last name" in form is filled up
+    localStorage.removeItem('privacyAccepted');
   </script>
 @endif
-<body>
-    @include('students.privacy')
-  <header>
-    <div class="header-content">
-        <div class="text-logo-img">
-            <div class="logo-img">
-                <img src="/images/nolitc.png" alt="NOLITC Logo" class="logo">
-                <h2 class="nolitc">NEGROS OCCIDENTAL LANGUANGE <br>AND INFORMATION TECHNOLOGY  CENTER</h2>
-            </div>
-            <div class="burger-icon" id="burger-icon" onclick="isShowNav()">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-        <nav id="navigition" class="navi">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/#programs">Programs</a></li>
-                <li><a href="/#updates">Updates</a></li>
-                <li><a href="/#about">About Us</a></li>
-                <li><a href="/#contact">Contact Us</a></li>
-            </ul>
-        </nav>
-    </div>
-  </header>
+@include('students.privacy')
+<div class="register-page">
   <div class="header-title">
-    <a href="{{route('welcome')}}" class="back-icon">
-      <img src="image-website/Polygon 1.png" alt="back logo">
-    </a>
-    <h1>REGISTRATION FORM</h1>
+    <a href="{{ route('welcome') }}" class="back-btn" aria-label="Back to Home"><span aria-hidden="true">←</span> Back to Home</a>
+    {{-- <h1>Registration Form</h1> --}}
   </div>
-  <main class="main-container">
-    <h2>LEARNERS PROFILE FORM</h2>
+  <main class="main-container form-container">
+    <h2>REGISTRATION FORM</h2>
     <hr>
-    <section class="qualification-section">
+    <section class="qualification-section inputs">
       <form id="registrationForm" action="{{route("register_student")}}" method="post">
         <div class="inputs preferred-qualification">
           <h3>Preferred Program</h3>
            @csrf
-          <div class="input-data">
+          <div class="input-data full">
             <label for="qualification" class="label-input-tag">Program *</label>
             <select name="program" id="qualification" class="qualification-select">
                 @foreach ($programs as $program)
@@ -74,7 +37,6 @@
         </div>
         <div class="inputs fullname">
           <h3>Learner Profile/Manpower Profile</h3>
-          <h4>Full Name</h4>
           <div class="content-info">
             <div class="input-data">
               <label for="lname" class="label-input-tag">Last Name *</label>
@@ -172,8 +134,8 @@
             </div>
             <div class="input-data">
               <label for="zip" class="label-input-tag">Zip *</label>
-              <input type="number" name="zip" id="zip" placeholder="zip code" value="{{old('zip')}}"
-              oninput="if(this.value.length > 4){ this.value = this.value.slice(0,4); }">
+              <input type="text" name="zip" id="zip" placeholder="ZIP code" value="{{old('zip')}}" inputmode="numeric" autocomplete="postal-code" maxlength="4" pattern="\d{4}"
+              oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,4)">
               @error('zip')
               <p class="error">{{$message}}</p>
               @enderror
@@ -198,12 +160,16 @@
               <label for="contact-number" class="label-input-tag">Contact Number *</label>
               <input 
                 class="contact-number" 
-                type="number" 
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
                 placeholder="e.g. 09171234567" 
                 id="contact-number" 
                 name="contact-number" 
                 value="{{ old('contact-number') }}"
-                oninput="if(this.value.length > 11) { this.value = this.value.slice(0, 11); }">
+                maxlength="11"
+                pattern="\d{11}"
+                oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,11)">
               @error('contact-number')
                 <p class="error">{{ $message }}</p>
               @enderror
@@ -290,9 +256,9 @@
         <div class="inputs birthdate">
           <h3>Birthdate</h3>
           <div class="input-data">
-            <label for="birthdate" class="label-input-tag">Date *</label>
-            <input type="date" name="birthdate" id="birthdate" value="{{old('birthdate')}}">
-            <div class="label">MM/DD/YYYY</div>
+            <label for="birthdate" class="label-input-tag">Date of Birth *</label>
+            <input type="date" name="birthdate" id="birthdate" value="{{old('birthdate')}}" min="1900-01-01" max="{{ date('Y-m-d') }}" autocomplete="bday">
+            <div class="form-help">Format: MM/DD/YYYY</div>
             @error('birthdate')
             <p class="error">{{$message}}</p>
             @enderror
@@ -679,57 +645,6 @@
     </section>
 
   </main>
-  <footer class="footer">
-    <div class="footer-content">
-        <div class="phi-logo">
-            <img src="/image-website/phil-seal 1.png" alt="logo" class="pic">
-        </div>
-    </div>
-    <div class="footer-content">
-        <h3 class="republic">REPUBLIC OF THE PHILIPPINES</h3>
-        <p class="content">All content is the public domain unless<br>otherwise stated</p>
-    </div>
-    <div class="footer-content">
-        <h3 class="ph">ABOUT GOV.PH</h3>
-        <p class="learn">Learn more about Philippine Goverment, its structure,<br> how government works and the people behind it</p>
-        <div class="gov">
-            <p class="gov1">GOV.PH</p>
-            <p class="gov2">Open Data Patrol</p>
-            <p class="gov3">Official Gazettte</p>
-        </div>
-    </div>
-    <div class="footer-content">
-        <h3 class="goverment">GOVERMENT LINKS</h3>
-        <p><a href="https://op-proper.gov.ph/" class="pres">Office of the President</a></p>
-        <p><a href="https://www.ovp.gov.ph/" class="vice">Office of the Vice President</a></p>
-        <p><a href="https://legacy.senate.gov.ph/" class="senate">Senate of the Philippines</a></p>
-        <p><a href="https://www.congress.gov.ph/" class="house">House of the Representative</a></p>
-        <p><a href="https://sc.judiciary.gov.ph/" class="supreme">Supreme Court</a></p>
-        <p><a href="https://ca.judiciary.gov.ph/" class="appeals">Court of Appeals</a></p>
-        <p><a href="https://sb.judiciary.gov.ph/" class="sandigan">Sandigan Bayan</a></p>
-        <p><a href="https://www.negros-occ.gov.ph/" class="negros">Province of Negros Occidental</a></p>
-
-    </div>
-    <div class="footer-content">
-        <h3 class="visit">Visit Us</h3>
-        <p class="paglaum">Paglaum Sports Complex<br>Hernaez St.Bacolod City,<br>Negros Occidental</p>
-        <p class="phone">Telephone: (034) 435 6092<br>Email: nolitc@gmail.com</p>
-    </div>
-    @if($errors->any())
-    <script>
-      Swal.fire({
-        title: 'Missing Information!',
-        text: 'Please fill out all required fields.',
-        icon: 'warning',
-        confirmButtonText: 'OK'
-      });
-    </script>
-    @endif
-  </footer>
-
-<!-- scripts for registration form -->
-<script src="js/register.js"></script>
-
 <script>
   document.getElementById('id01').style.display = 'block';
 
@@ -822,7 +737,6 @@
 
 
 </script>
-
 @if($errors->any())
 <script>
     Swal.fire({
@@ -834,6 +748,7 @@
 </script>
 @endif
 
+</div>
 <div id="statusModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -848,5 +763,6 @@
     </div>
 </div>
 
-</body>
-</html>
+<!-- jQuery must load before register.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@include('partials.frontend-footer', ['js_file' => '/js/register.js'])

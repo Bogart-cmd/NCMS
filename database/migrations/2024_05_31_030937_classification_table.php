@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('classification', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('students_id');
+            $table->unsignedBigInteger('students_id');
             $table->foreign('students_id')->references('id')->on('students')->onDelete('cascade');
             $table->string('classification_data');
             $table->timestamps();

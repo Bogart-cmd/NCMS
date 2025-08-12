@@ -20,21 +20,22 @@ class NolitcController extends Controller
 
     public function welcome(){
         $intro_images = IntroImage::active()->ordered()->get();
-        $score_card = ScoreCard::first();
+        $score_card = ScoreCard::query()->firstOrCreate([], [
+            'number_of_graduates' => 0,
+            'number_of_employed' => 0,
+            'employment_rate' => 0,
+        ]);
         $updates = Updates::latest()->take(4)->get(); 
         $partners = Partners::orderBy('id','asc')->get();
+        $programs = Programs::orderBy('id', 'asc')->take(3)->get();
 
         return view("welcome", [
             'datas' => $intro_images,
             'scoreCard' => $score_card,
             'updates' => $updates,
-            'partners' => $partners
+            'partners' => $partners,
+            'programs' => $programs
         ]);
-    }
-
-    public function tesda_qual(){
-        $data_content = Programs::all();
-        return view("tesda_qual", ["datas"=> $data_content]);
     }
 
     public function see_more($id){

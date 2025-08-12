@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/intro-images/add','add_intro_images')->name('add_intro_images'); //add new intro image
         Route::delete('/intro-images/delete','delete_intro_image')->name('delete_intro_image'); //delete intro image
         Route::put('/intro-images/order','update_intro_image_order')->name('update_intro_image_order'); //update intro image order
+        Route::post('/intro-images/renumber','renumber_intro_images')->name('renumber_intro_images'); //renumber intro images
         Route::get('/program-management','program_management')->name('program_management'); //goto Program Managemant
         Route::get('/program-management/form','program_management_form')->name('programs'); //goto TESDA QUALIFICATIONS content
         Route::get('/program-management/addform','programs_addform')->name('programs_addform'); //goto add TESDA QUALIFICATIONS  form
@@ -79,8 +80,7 @@ Route::controller(StudentsController::class)->group(function () {
 
 Route::controller(NolitcController::class)->group(function () {
     Route::get("/","welcome")->name("welcome"); //homepage for website
-    Route::get("/tesda_qual","tesda_qual")->name("tesda_qual"); //goto TESDA Qualifications page
-    Route::get("/see_more/{id}","see_more")->name("see-more"); //goto TESDA Qualifications page see more button
+    Route::get("/see_more/{id}","see_more")->name("see-more"); //goto program page see more button
     //goto by name of function
     Route::get("/know-more","know_more")->name("know_more");
     Route::get("/register", "register_student")->name("register.student");

@@ -3,97 +3,128 @@
 <x-adminHeader></x-adminHeader>
 <x-adminSidebar :user="auth()->user()->usertype"></x-adminSidebar>
 
-<section class="container mx-auto p-10 pt-44">
-    <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Manage NOLITC Updates</h1>
-            <button onclick="openAddModal()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-                Add New Update
-            </button>
+<main class="admin-content lg:ml-64 ml-0 pt-20 lg:pt-24 px-3 lg:px-6 min-h-screen bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Manage NOLITC Updates</h1>
+            <p class="text-gray-600 text-sm lg:text-base">Manage news updates and announcements</p>
         </div>
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
+        <div class="bg-white rounded-lg shadow-sm border p-4 lg:p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Updates</h2>
+                <button onclick="openAddModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add New Update
+                </button>
             </div>
-        @endif
 
-        <!-- Updates Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="px-4 py-2 border-b text-left">Image</th>
-                        <th class="px-4 py-2 border-b text-left">Title</th>
-                        <th class="px-4 py-2 border-b text-left">Date</th>
-                        <th class="px-4 py-2 border-b text-left">Status</th>
-                        <th class="px-4 py-2 border-b text-left">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($updates as $update)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border-b">
-                                @if($update->image)
-                                    <img src="{{ $update->image_url }}" alt="{{ $update->title }}" class="w-16 h-16 object-cover rounded">
-                                @else
-                                    <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
-                                        No Image
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <!-- Updates Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-3 py-3 border-b text-left text-sm font-medium text-gray-700">Image</th>
+                            <th class="px-3 py-3 border-b text-left text-sm font-medium text-gray-700">Title</th>
+                            <th class="px-3 py-3 border-b text-left text-sm font-medium text-gray-700">Date</th>
+                            <th class="px-3 py-3 border-b text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-3 py-3 border-b text-left text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($updates as $update)
+                            <tr class="hover:bg-gray-50 border-b">
+                                <td class="px-3 py-3">
+                                    @if($update->image)
+                                        <img src="{{ $update->image_url }}" alt="{{ $update->title }}" class="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded">
+                                    @else
+                                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
+                                            No Image
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-3">
+                                    <div class="font-medium text-sm lg:text-base">{{ $update->title }}</div>
+                                    <div class="text-xs lg:text-sm text-gray-600 mt-1">{{ Str::limit($update->content, 80) }}</div>
+                                </td>
+                                <td class="px-3 py-3 text-sm">{{ $update->formatted_date }}</td>
+                                <td class="px-3 py-3">
+                                    <span class="px-2 py-1 text-xs rounded-full {{ $update->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $update->is_active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="px-3 py-3">
+                                    <div class="flex space-x-2">
+                                        <button onclick="openEditModal({{ $update->id }})" class="text-blue-600 hover:text-blue-800 p-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <form action="{{ route('admin.updates.toggle') }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="update_id" value="{{ $update->id }}">
+                                            <button type="submit" class="text-yellow-600 hover:text-yellow-800 p-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.updates.delete') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this update?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="update_id" value="{{ $update->id }}">
+                                            <button type="submit" class="text-red-600 hover:text-red-800 p-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
-                                @endif
-                            </td>
-                            <td class="px-4 py-2 border-b">
-                                <div class="font-medium">{{ $update->title }}</div>
-                                <div class="text-sm text-gray-600">{{ Str::limit($update->content, 100) }}</div>
-                            </td>
-                            <td class="px-4 py-2 border-b">{{ $update->formatted_date }}</td>
-                            <td class="px-4 py-2 border-b">
-                                <span class="px-2 py-1 text-xs rounded-full {{ $update->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $update->is_active ? 'Active' : 'Inactive' }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-2 border-b">
-                                <div class="flex space-x-2">
-                                    <button onclick="openEditModal({{ $update->id }})" class="text-blue-600 hover:text-blue-800">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-3 py-8 text-center text-gray-500">
+                                    <div class="text-center">
+                                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                                         </svg>
-                                    </button>
-                                    <form action="{{ route('admin.updates.toggle') }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="update_id" value="{{ $update->id }}">
-                                        <button type="submit" class="text-yellow-600 hover:text-yellow-800">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('admin.updates.delete') }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this update?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="hidden" name="update_id" value="{{ $update->id }}">
-                                        <button type="submit" class="text-red-600 hover:text-red-800">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-4 py-8 text-center text-gray-500">
-                                No updates found. Add your first update!
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                        <p class="text-sm font-medium">No updates found</p>
+                                        <p class="text-xs text-gray-400">Add your first update!</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</section>
+    
+    <style>
+        .admin-content {
+            transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-content {
+                padding-top: 5rem;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+        }
+    </style>
+</main>
 
 <!-- Add Update Modal -->
 <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">

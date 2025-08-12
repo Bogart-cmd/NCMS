@@ -97,21 +97,33 @@
         <div class="carousel-wrapper">
             <button class="carousel-arrow left" aria-label="Scroll left">&#8249;</button>
             <div class="program-cards">
-                <div class="card">
-                    <img src="image-website/program 1.png" alt="TESDA Qualifications" class="tesda">
-                    <h3>TESDA<br>Qualifications</h3>
-                    <a href="{{route('tesda_qual')}}" class="program-btn">See more</a>
-                </div>
-                <div class="card">
-                    <img src="image-website/program 2.png" alt="TESDA Accredited Assessment Center" class="tesda">
-                    <h3>TESDA Accredited <br> Assessment Center</h3>
-                    <a href="#" class="program-btn">See more</a>
-                </div>
-                <div class="card">
-                    <img src="image-website/program 3.png" alt="Special Programs" class="tesda">
-                    <h3>Special <br> Programs</h3>
-                    <a href="#" class="program-btn">See more</a>
-                </div>
+                @forelse($programs as $program)
+                    <div class="card">
+                        @if($program->img_name)
+                            <img src="{{ asset('assets/img/' . $program->img_name) }}" alt="{{ $program->name }}" class="tesda">
+                        @else
+                            <img src="image-website/program 1.png" alt="{{ $program->name }}" class="tesda">
+                        @endif
+                        <h3>{{ $program->name }}</h3>
+                        <a href="{{ route('see-more', ['id' => $program->id]) }}" class="program-btn">See more</a>
+                    </div>
+                @empty
+                    <div class="card">
+                        <img src="image-website/program 1.png" alt="Programs" class="tesda">
+                        <h3>Programs</h3>
+                        <a href="#programs" class="program-btn">See more</a>
+                    </div>
+                    <div class="card">
+                        <img src="image-website/program 2.png" alt="Assessment Center" class="tesda">
+                        <h3>Assessment Center</h3>
+                        <a href="#programs" class="program-btn">See more</a>
+                    </div>
+                    <div class="card">
+                        <img src="image-website/program 3.png" alt="Special Programs" class="tesda">
+                        <h3>Special Programs</h3>
+                        <a href="#programs" class="program-btn">See more</a>
+                    </div>
+                @endforelse
             </div>
             <button class="carousel-arrow right" aria-label="Scroll right">&#8250;</button>
         </div>
@@ -172,19 +184,19 @@
             <div class="scorecard-metrics">
                 <div class="metric">
                     <div class="metric-icon">🎓</div>
-                    <h3>{{$scoreCard->number_of_graduates}}</h3>
+                    <h3>{{ optional($scoreCard)->number_of_graduates ?? 0 }}</h3>
                     <p>Graduates</p>
                     <div class="metric-subtitle">Successfully completed programs</div>
                 </div>
                 <div class="metric">
                     <div class="metric-icon">💼</div>
-                    <h3>{{$scoreCard->number_of_employed}}</h3>
+                    <h3>{{ optional($scoreCard)->number_of_employed ?? 0 }}</h3>
                     <p>Employed</p>
                     <div class="metric-subtitle">Currently working professionals</div>
                 </div>
                 <div class="metric">
                     <div class="metric-icon">📈</div>
-                    <h3>{{$scoreCard->employment_rate}}%</h3>
+                    <h3>{{ optional($scoreCard)->employment_rate ?? 0 }}%</h3>
                     <p>Employment Rate</p>
                     <div class="metric-subtitle">Graduates successfully employed</div>
                 </div>

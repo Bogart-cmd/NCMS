@@ -1,57 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/register.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="css/register.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="icon" type="image/x-icon" href="../images/nolitc.png">
-  <title>Registration Form Review</title>
-</head>
-<body>
+@include('partials.frontend-header', ['title' => 'Registration Form Review', 'css_file' => '/css/register.css', 'show_hamburger' => true])
     @include('students.privacy')
-    <header>
-        <div class="header-content">
-            <div class="text-logo-img">
-                <div class="logo-img">
-                    <img src="/images/nolitc.png" alt="NOLITC Logo" class="logo">
-                    <h2 class="nolitc">NEGROS OCCIDENTAL LANGUANGE <br>AND INFORMATION TECHNOLOGY  CENTER</h2>
-                </div>
-                <div class="burger-icon" id="burger-icon" onclick="isShowNav()">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-            <nav id="navigition" class="navi">
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#programs">Programs</a></li>
-                    <li><a href="#updates">Updates</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-      </header>
   <div class="header-title">
-    <a href="#" class="back-icon">
-      <img src="image-website/Polygon 1.png" alt="back logo">
-    </a>
-    <h1>REGISTRATION FORM</h1>
+    <a href="{{ route('welcome') }}" class="back-btn" aria-label="Back to Home"><span aria-hidden="true">←</span> Back to Home</a>
+    {{-- <h1>REGISTRATION FORM</h1> --}}
   </div>
-  <main class="main-container">
+  <main class="main-container form-container">
     <h2>REVIEW YOUR SUBMISSION</h2>
     <hr>
-    <section class="qualification-section">
+    <section class="qualification-section inputs">
       <form action="{{route("register_student_submit")}}" method="POST">
         <div class="btn-div">
-            <button class="edit-btn" id="btn_edit" onclick="removeDisabled()" type="button">Edit Profile</button>
+            <button class="edit-btn" id="btn_edit" onclick="removeDisabled()" type="button">Edit Submission</button>
         </div>
         <div class="inputs preferred-qualification">
           <h3>Preferred Program</h3>
            @csrf
-          <div class="input-data">
+          <div class="input-data full">
             <label for="qualification" class="label-input-tag">Program *</label>
             <select name="program" id="qualification" class="qualification-select" style="width: 25%" disabled>
                 @foreach ($programs as $program)
@@ -70,7 +34,6 @@
         </div>
         <div class="inputs fullname">
           <h3>Learner Profile/Manpower Profile</h3>
-          <h4>Full Name</h4>
           <div class="content-info">
             <div class="input-data">
               <label for="lname" class="label-input-tag">Last Name *</label>
@@ -643,43 +606,6 @@
     </section>
 
   </main>
-  <footer class="footer">
-    <div class="footer-content">
-        <div class="phi-logo">
-            <img src="/image-website/phil-seal 1.png" alt="logo" class="pic">
-        </div>
-    </div>
-    <div class="footer-content">
-        <h3 class="republic">REPUBLIC OF THE PHILIPPINES</h3>
-        <p class="content">All content is the public domain unless<br>otherwise stated</p>
-    </div>
-    <div class="footer-content">
-        <h3 class="ph">ABOUT GOV.PH</h3>
-        <p class="learn">Learn more about Philippine Goverment, its structure,<br> how government works and the people behind it</p>
-        <div class="gov">
-            <p class="gov1">GOV.PH</p>
-            <p class="gov2">Open Data Patrol</p>
-            <p class="gov3">Official Gazettte</p>
-        </div>
-    </div>
-    <div class="footer-content">
-        <h3 class="goverment">GOVERMENT LINKS</h3>
-        <p><a href="https://op-proper.gov.ph/" class="pres">Office of the President</a></p>
-        <p><a href="https://www.ovp.gov.ph/" class="vice">Office of the Vice President</a></p>
-        <p><a href="https://legacy.senate.gov.ph/" class="senate">Senate of the Philippines</a></p>
-        <p><a href="https://www.congress.gov.ph/" class="house">House of the Representative</a></p>
-        <p><a href="https://sc.judiciary.gov.ph/" class="supreme">Supreme Court</a></p>
-        <p><a href="https://ca.judiciary.gov.ph/" class="appeals">Court of Appeals</a></p>
-        <p><a href="https://sb.judiciary.gov.ph/" class="sandigan">Sandigan Bayan</a></p>
-        <p><a href="https://www.negros-occ.gov.ph/" class="negros">Province of Negros Occidental</a></p>
-
-    </div>
-    <div class="footer-content">
-        <h3 class="visit">Visit Us</h3>
-        <p class="paglaum">Paglaum Sports Complex<br>Hernaez St.Bacolod City,<br>Negros Occidental</p>
-        <p class="phone">Telephone: (034) 435 6092<br>Email: nolitc@gmail.com</p>
-    </div>
-  </footer>
-  <script src="js/register.js"></script>
-</body>
-</html>
+<!-- jQuery must load before register.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@include('partials.frontend-footer', ['js_file' => '/js/register.js'])

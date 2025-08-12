@@ -26,8 +26,7 @@ class AuthUser extends Controller
 
         // echo Hash::make($data['password']);
 
-        $user = User_info::where("username", $data["username"])->first();
-        $user->password = Hash::make($data['password']);
+        $user = User_info::where('username', $data['username'])->first();
         if ($user && Auth::attempt([
             'username' => $data['username'],
             'password' => $data['password']
@@ -41,9 +40,9 @@ class AuthUser extends Controller
             } elseif (auth()->user()->usertype == 'officer') {
                 return redirect()->route('officer')->with('success', 'Welcome officer');
             }
-        } else {
-            return back()->with('invalid', 'Invalid credentials!');
         }
+
+        return back()->with('invalid', 'Invalid credentials!');
     }
     public function admin(){
         //bar

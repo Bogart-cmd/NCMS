@@ -32,11 +32,20 @@
                     <div class="text-xl mt-10">
                        {{$program->caption}}
                     </div>
-                    <form action="{{route('see_more_program', ['id'=>$program->id])}}" class="mt-10">
-                        <button class="bg-white text-xl text-[#168753] font-black py-1 px-4 rounded-md">
-                            SEE MORE
-                        </button>
-                    </form>
+                    <div class="mt-10 flex gap-3 items-center">
+                        <form action="{{route('see_more_program', ['id'=>$program->id])}}">
+                            <button class="bg-white text-xl text-[#168753] font-black py-1 px-4 rounded-md">
+                                SEE MORE
+                            </button>
+                        </form>
+                        <a href="{{ route('updateContent', ['id' => $program->id]) }}" class="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700">EDIT</a>
+                        <form method="POST" action="{{ route('delete.programs') }}" onsubmit="return confirm('Delete this program?');">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="delete_id" value="{{ $program->id }}" />
+                            <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded-md hover:bg-red-700">DELETE</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         @endforeach

@@ -9,11 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Always load page-specific CSS first (if any), then load shared header/footer, then global welcome.css -->
     @if(isset($css_file))
         <link rel="stylesheet" href="{{ $css_file }}">
-    @else
-        <link rel="stylesheet" href="/css/welcome.css">
     @endif
+    <link rel="stylesheet" href="/css/header-footer.css">
+    <link rel="stylesheet" href="/css/welcome.css">
     <style>
         :root { 
             --font-primary: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; 
@@ -24,9 +25,9 @@
     </style>
 </head>
 <body>
-    <header>
+    <header class="site-header">
         <div class="header-content">
-            <img src="image-website/logo.png" alt="NOLITC Logo" class="logo">
+            <img src="{{ asset('image-website/logo.png') }}" alt="NOLITC Logo" class="logo">
             <h2>NEGROS OCCIDENTAL LANGUANGE <br>AND INFORMATION TECHNOLOGY  CENTER</h2>
             @if(isset($show_hamburger) && $show_hamburger)
                 <button class="hamburger" id="hamburger">
