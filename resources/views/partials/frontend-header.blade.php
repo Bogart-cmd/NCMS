@@ -13,8 +13,8 @@
     @if(isset($css_file))
         <link rel="stylesheet" href="{{ $css_file }}">
     @endif
-    <link rel="stylesheet" href="/css/header-footer.css">
-    <link rel="stylesheet" href="/css/welcome.css">
+    <link rel="stylesheet" href="/css/header-footer.css?v={{ time() }}">
+    <link rel="stylesheet" href="/css/welcome.css?v={{ time() }}">
     <style>
         :root { 
             --font-primary: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; 
@@ -22,9 +22,13 @@
         html, body, button, input, select, textarea { 
             font-family: var(--font-primary) !important; 
         }
+        /* Frontend scroll container setup */
+        html, body { height: 100%; }
+        body { overflow: hidden !important; }
     </style>
 </head>
 <body>
+    <div id="page-scroll" class="page-scroll">
     <header class="site-header">
         <div class="header-content">
             <img src="{{ asset('image-website/logo.png') }}" alt="NOLITC Logo" class="logo">

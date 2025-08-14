@@ -57,6 +57,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/admin-updates/delete', [AdminController::class, 'deleteUpdate'])->name('admin.updates.delete'); // Delete update
         Route::put('/admin-updates/toggle-status', [AdminController::class, 'toggleUpdateStatus'])->name('admin.updates.toggle'); // Toggle update status
         Route::post('/admin-updates/parse-embed', [AdminController::class, 'parseFacebookEmbed'])->name('admin.updates.parse-embed'); // Parse Facebook embed
+
+        // Debug route: Generate Region VI students (available only in debug)
+        if (config('app.debug')) {
+            Route::post('/debug/generate-region6-students', 'generateRegion6Students')->name('debug.generate_region6_students');
+            Route::post('/debug/remove-debug-students', 'removeDebugStudents')->name('debug.remove_debug_students');
+        }
     });
 });
 

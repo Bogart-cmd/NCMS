@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reapply.css">
-    <link rel="icon" type="image/x-icon" href="/images/nolitc.png">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Re-Application</title>
-</head>
-<body>
+@include('partials.frontend-header', ['title' => 'Re-Application', 'css_file' => '/css/reapply.css', 'show_hamburger' => true])
     <header>
         <div class="header-content">
             <img src="image-website/logo.png" alt="NOLITC Logo" class="logo">
@@ -79,7 +69,6 @@
           <img src="image-website/phil-seal 1.png" alt="logo" class="pic">
         </div>
     </footer>
-
     <script>
             document.getElementById("reapplyButton").addEventListener("click", function() {
                 Swal.fire({
@@ -123,6 +112,4 @@
             });
         </script>
     @endif
-    
-</body>
-</html>
+@include('partials.frontend-footer')

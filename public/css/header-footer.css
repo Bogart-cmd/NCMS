@@ -1,5 +1,17 @@
 /* Shared header/footer styles applied consistently across all pages */
 
+/* Root sizing only */
+html, body { min-height: 100%; }
+
+/* Dedicated scroll container for frontend pages (prevents html/body double scroll) */
+.page-scroll {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable; /* reserve space to prevent content shift */
+}
+.page-scroll.menu-open { overflow: hidden; }
+
 /* Header */
 .site-header {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -144,23 +156,25 @@
 @media (max-width: 767px) {
   .site-header .header-content { padding: 0.75rem; flex-wrap: nowrap; }
   .site-header .logo { height: 50px; }
-  .site-header .hamburger { display: flex !important; order: 3; position: static; margin-left: auto; }
+  .site-header .hamburger { display: flex !important; order: 3; position: relative; margin-left: auto; z-index: 1010; }
   .site-header .header-content h2 { flex: 1 1 auto; }
   .site-header nav { display: none; max-height: 0; opacity: 0; pointer-events: none; }
   .site-header nav.active {
     display: block;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(92%, 420px);
+    position: fixed;
+    top: 76px; /* approx header height + spacing */
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
     background: rgba(255,255,255,0.97);
     border: 1px solid rgba(22,135,83,0.12);
     border-radius: 16px;
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 0.75rem;
     box-shadow: 0 8px 32px rgba(22,135,83,0.15);
-    z-index: 1004;
-    max-height: 300px;
+    z-index: 10040;
+    max-height: 60vh;
+    overflow-y: auto;
     opacity: 1;
     pointer-events: auto;
   }
@@ -171,5 +185,45 @@
     grid-template-columns: 1fr;
     text-align: center;
   }
+}
+
+/* Modern scrollbar styling (brand colors + subtle interaction) */
+/* Firefox */
+.page-scroll, html { scrollbar-width: thin; }
+.page-scroll { scrollbar-color: transparent transparent; }
+.page-scroll:hover,
+.page-scroll.is-scrolling { scrollbar-color: #168753 #f4f8ee; }
+html { scrollbar-color: #168753 #f4f8ee; }
+
+/* WebKit (Chrome, Edge, Safari) */
+.page-scroll::-webkit-scrollbar,
+html::-webkit-scrollbar { width: 12px; height: 12px; }
+
+.page-scroll::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+.page-scroll:hover::-webkit-scrollbar-track,
+.page-scroll.is-scrolling::-webkit-scrollbar-track { background: #f4f8ee; }
+html::-webkit-scrollbar-track { background: #f4f8ee; }
+
+.page-scroll::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  /* Default (idle): subtle */
+  background: rgba(22, 135, 83, 0.0);
+  border: 6px solid rgba(244, 248, 238, 0.0);
+  transition: background-color 0.2s ease, border 0.2s ease;
+}
+.page-scroll:hover::-webkit-scrollbar-thumb,
+.page-scroll.is-scrolling::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #26b372, #168753);
+  border: 3px solid #f4f8ee;
+}
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #26b372, #168753);
+  border: 3px solid #f4f8ee;
 }
 

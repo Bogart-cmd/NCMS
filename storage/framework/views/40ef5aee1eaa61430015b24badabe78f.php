@@ -126,6 +126,21 @@ unset($__errorArgs, $__bag); ?>
             </form>
         </div>
         
+        <!-- Debug: Generate Region VI Students -->
+        <?php if(config('app.debug')): ?>
+        <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+            <form action="<?php echo e(route('debug.generate_region6_students')); ?>" method="POST" class="flex items-end gap-3">
+                <?php echo csrf_field(); ?>
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Generate Test Students (Region VI)</label>
+                    <input type="number" name="count" min="1" max="200" value="30" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#168753] focus:border-transparent"/>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium" type="submit">Generate</button>
+                <span class="text-xs text-gray-500">Visible only in debug mode</span>
+            </form>
+        </div>
+        <?php endif; ?>
+
         <!-- Students Table -->
         <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
         <table id="myTable" class="display w-full">
@@ -223,20 +238,34 @@ function clickRow(url) {
 
 // Initialize DataTable with responsive options
 $(document).ready(function() {
-    $('#myTable').DataTable({
-        responsive: true,
-        pageLength: 25,
-        language: {
-            search: "Search students:",
-            lengthMenu: "Show _MENU_ students per page",
-            info: "Showing _START_ to _END_ of _TOTAL_ students"
-        },
-        columnDefs: [
-            { responsivePriority: 1, targets: 1 }, // Name column
-            { responsivePriority: 2, targets: 2 }, // Program column
-            { responsivePriority: 3, targets: 6 }, // Status column
-        ]
-    });
+    try {
+        // Check if DataTable is already initialized
+        if ($.fn.DataTable.isDataTable('#myTable')) {
+            $('#myTable').DataTable().destroy();
+        }
+        
+        // Initialize new DataTable
+        $('#myTable').DataTable({
+            responsive: true,
+            pageLength: 25,
+            language: {
+                search: "Search students:",
+                lengthMenu: "Show _MENU_ students per page",
+                info: "Showing _START_ to _END_ of _TOTAL_ students"
+            },
+            columnDefs: [
+                { responsivePriority: 1, targets: 1 }, // Name column
+                { responsivePriority: 2, targets: 2 }, // Program column
+                { responsivePriority: 3, targets: 6 }, // Status column
+            ],
+            destroy: true, // Allow reinitialization
+            retrieve: true  // Retrieve existing instance if available
+        });
+    } catch (error) {
+        console.error('Error initializing DataTable:', error);
+        // Fallback to basic table if DataTable fails
+        $('#myTable').addClass('responsive-table');
+    }
 });
 </script>
 
@@ -290,6 +319,36 @@ $(document).ready(function() {
     background: #168753;
     color: white !important;
     border-color: #168753;
+}
+
+/* Fallback responsive table styles */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.responsive-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+@media (max-width: 768px) {
+    .responsive-table {
+        font-size: 0.875rem;
+    }
+    
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.5rem;
+    }
 }
 </style>
 <?php echo $__env->make('partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

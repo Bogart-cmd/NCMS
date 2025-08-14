@@ -35,6 +35,7 @@
         </div>
     </footer>
 
+    </div>
     <!-- Global header behavior and back-to-top -->
     <script src="<?php echo e(asset('js/header.js')); ?>?v=<?php echo e(time()); ?>" defer></script>
 

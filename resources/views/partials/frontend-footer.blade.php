@@ -35,6 +35,7 @@
         </div>
     </footer>
 
+    </div>
     <!-- Global header behavior and back-to-top -->
     <script src="{{ asset('js/header.js') }}?v={{ time() }}" defer></script>
 

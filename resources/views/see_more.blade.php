@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Global font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root { 
-            --font-primary: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; 
-        }
-    </style>
-    <link rel="stylesheet" href="/css/see_more.css">
-    <link rel="icon" type="image/x-icon" href="/images/nolitc.png">
-    <title>Program Info - {{ $datas->name }}</title>
-</head>
-<body>
 @include('partials.frontend-header', ['title' => 'Program Info - ' . $datas->name, 'css_file' => '/css/see_more.css', 'show_hamburger' => true])
     <main>
         <section class="qualification-banner">
@@ -62,5 +43,3 @@
         </section>
     </main>
 @include('partials.frontend-footer')
-</body>
-</html>

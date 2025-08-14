@@ -70,7 +70,7 @@
         <!-- Navigation Menu -->
         <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto min-h-0" style="max-height: calc(100vh - 12rem);">
             <ul class="space-y-1">
-                <?php if($user!=='officer'): ?>
+        <?php if($user!=='officer'): ?>
                 <li>
                     <a href="<?php echo e($user==='admin'?route('admin'):route('staff')); ?>" 
                        class="flex items-center gap-2 px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 group">
@@ -80,7 +80,7 @@
                         </svg>
                         <span class="font-medium text-sm">Dashboard</span>
                     </a>
-                </li>
+                    </li>
                 <?php endif; ?>
 
                 <?php if($user==='staff'||$user==='admin'): ?>
@@ -98,13 +98,13 @@
                             <div class="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center" id="total_number">
                                 <?php echo e($total_numbers); ?>
 
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <?php endif; ?>
+                    </div>
+                    </div>
+                </a>
+            </li>
+        <?php endif; ?>
 
-                <?php if($user==='admin'||$user==='officer'): ?>
+        <?php if($user==='admin'||$user==='officer'): ?>
                 <li>
                     <a href="<?php echo e(route('intro_images')); ?>" 
                        class="flex items-center gap-2 px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 group">
@@ -154,7 +154,7 @@
                         <span class="font-medium text-sm">Partners</span>
                     </a>
                 </li>
-                <?php endif; ?>
+        <?php endif; ?>
 
                 <li>
                     <a href="<?php echo e(route('settings')); ?>" 
@@ -168,19 +168,19 @@
                 </li>
 
                 <li class="pt-3 border-t border-white/10">
-                    <form action="<?php echo e(route('signoutAction')); ?>" method="POST">
-                        <?php echo method_field("POST"); ?>
-                        <?php echo csrf_field(); ?>
+            <form action="<?php echo e(route('signoutAction')); ?>" method="POST">
+                <?php echo method_field("POST"); ?>
+                <?php echo csrf_field(); ?>
                         <button type="submit" 
                                 class="flex items-center gap-2 w-full px-3 py-2 text-red-200 hover:text-white hover:bg-red-500/20 rounded-lg transition-all duration-200 group">
                             <svg class="w-4 h-4 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
                             <span class="font-medium text-sm">Logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
+                </button>
+            </form>
+        </li>
+    </ul>
         </nav>
     </div>
 </aside>

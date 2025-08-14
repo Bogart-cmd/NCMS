@@ -5,9 +5,8 @@ body {
     overflow-x: hidden;
 }
 
-body::-webkit-scrollbar {
-    display: none;
-}
+/* Do not override global scrollbar; keep consistent behavior */
+/* body::-webkit-scrollbar { display: none; } */
 
 header {
     background-color: #fff;

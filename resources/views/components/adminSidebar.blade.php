@@ -70,7 +70,7 @@
         <!-- Navigation Menu -->
         <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto min-h-0" style="max-height: calc(100vh - 12rem);">
             <ul class="space-y-1">
-                @if ($user!=='officer')
+        @if ($user!=='officer')
                 <li>
                     <a href="{{$user==='admin'?route('admin'):route('staff')}}" 
                        class="flex items-center gap-2 px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 group">
@@ -80,7 +80,7 @@
                         </svg>
                         <span class="font-medium text-sm">Dashboard</span>
                     </a>
-                </li>
+                    </li>
                 @endif
 
                 @if ($user==='staff'||$user==='admin')
@@ -97,13 +97,13 @@
                             <div class="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
                             <div class="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[1.25rem] text-center" id="total_number">
                                 {{$total_numbers}}
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                @endif
+                    </div>
+                    </div>
+                </a>
+            </li>
+        @endif
 
-                @if ($user==='admin'||$user==='officer')
+        @if ($user==='admin'||$user==='officer')
                 <li>
                     <a href="{{route('intro_images')}}" 
                        class="flex items-center gap-2 px-3 py-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 group">
@@ -153,7 +153,7 @@
                         <span class="font-medium text-sm">Partners</span>
                     </a>
                 </li>
-                @endif
+        @endif
 
                 <li>
                     <a href="{{route('settings')}}" 
@@ -167,19 +167,19 @@
                 </li>
 
                 <li class="pt-3 border-t border-white/10">
-                    <form action="{{route('signoutAction')}}" method="POST">
-                        @method("POST")
-                        @csrf
+            <form action="{{route('signoutAction')}}" method="POST">
+                @method("POST")
+                @csrf
                         <button type="submit" 
                                 class="flex items-center gap-2 w-full px-3 py-2 text-red-200 hover:text-white hover:bg-red-500/20 rounded-lg transition-all duration-200 group">
                             <svg class="w-4 h-4 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
                             <span class="font-medium text-sm">Logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
+                </button>
+            </form>
+        </li>
+    </ul>
         </nav>
     </div>
 </aside>

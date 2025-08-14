@@ -12,6 +12,12 @@
   </div>
   <main class="main-container form-container">
     <h2>REGISTRATION FORM</h2>
+    <?php if(config('app.debug')): ?>
+      <div style="margin: 8px 0; display:flex; gap:8px; flex-wrap:wrap">
+        <button type="button" id="autofillTestDataBtn" style="background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:6px;padding:6px 10px;font-weight:600;">Autofill Test Data (Debug)</button>
+        <button type="button" id="clearFormBtn" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:6px;padding:6px 10px;font-weight:600;">Clear Form</button>
+      </div>
+    <?php endif; ?>
     <hr>
     <section class="qualification-section inputs">
       <form id="registrationForm" action="<?php echo e(route("register_student")); ?>" method="post">
@@ -918,6 +924,157 @@ unset($__errorArgs, $__bag); ?>
     pollSelect('pprovince', "<?php echo e(old('pprovince')); ?>", 'change');
     pollSelect('pmuni', "<?php echo e(old('pcity-municipality')); ?>", null);
   });
+
+  // Debug-only autofill helpers
+  <?php if(config('app.debug')): ?>
+  (function() {
+    function dispatchChange(el){ el && el.dispatchEvent(new Event('change', { bubbles:true })); }
+    function firstSelectableIndex(select){
+      if(!select) return -1;
+      for(let i=0;i<select.options.length;i++){
+        const opt = select.options[i];
+        if(!opt.disabled && opt.value !== '') return i;
+      }
+      return -1;
+    }
+    function waitForOptions(selectId, min=2, timeoutMs=5000){
+      return new Promise((resolve,reject)=>{
+        const start = Date.now();
+        const timer = setInterval(()=>{
+          const el = document.getElementById(selectId);
+          if(el && el.options && el.options.length >= min){ clearInterval(timer); resolve(el); }
+          if(Date.now()-start>timeoutMs){ clearInterval(timer); resolve(document.getElementById(selectId)); }
+        },200);
+      });
+    }
+    async function fillCascading(regionId, provinceId, cityId){
+      const regionSel = await waitForOptions(regionId);
+      if(regionSel){
+        const idx = firstSelectableIndex(regionSel);
+        if(idx>=0){ regionSel.selectedIndex = idx; dispatchChange(regionSel); }
+      }
+      const provSel = await waitForOptions(provinceId);
+      if(provSel){
+        const idx = firstSelectableIndex(provSel);
+        if(idx>=0){ provSel.selectedIndex = idx; dispatchChange(provSel); }
+      }
+      const citySel = await waitForOptions(cityId);
+      if(citySel){
+        const idx = firstSelectableIndex(citySel);
+        if(idx>=0){ citySel.selectedIndex = idx; dispatchChange(citySel); }
+      }
+    }
+    function setRadio(name, value){
+      const el = document.querySelector(`input[type="radio"][name="${name}"][value="${value}"]`);
+      if(el){ el.checked = true; dispatchChange(el); }
+    }
+    function setSelectByText(select, wanted){
+      if(!select) return;
+      for(let i=0;i<select.options.length;i++){
+        if(select.options[i].text === wanted){ select.selectedIndex = i; dispatchChange(select); return; }
+      }
+      const idx = firstSelectableIndex(select);
+      if(idx>=0){ select.selectedIndex = idx; dispatchChange(select); }
+    }
+    function setValue(id, val){ const el=document.getElementById(id); if(el){ el.value = val; el.dispatchEvent(new Event('input',{bubbles:true})); } }
+    function setCheckbox(id, checked=true){ const el=document.getElementById(id); if(el){ el.checked = checked; el.dispatchEvent(new Event('change',{bubbles:true})); } }
+
+    async function autofillTestData(){
+      try{
+        // Hide privacy if visible
+        if(typeof acceptPrivacy === 'function'){ acceptPrivacy(); }
+
+        // Program
+        const qSel = document.getElementById('qualification');
+        if(qSel){ const idx = firstSelectableIndex(qSel); if(idx>=0){ qSel.selectedIndex = idx; dispatchChange(qSel); } }
+
+        // Learner Profile
+        setValue('lname','Dela Cruz');
+        setValue('fname','Juan');
+        setValue('mname','Santos');
+        setSelectByText(document.getElementById('suffix'),'None');
+
+        // Address
+        await fillCascading('region','province','muni');
+        // Fill Number, Street via datalist (barangay)
+        (function(){
+          const input = document.querySelector('input[list="number-street"]');
+          const list = document.getElementById('number-street');
+          if (input && list && list.options && list.options.length > 0) {
+            input.value = list.options[0].value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          } else {
+            setValue('number-street','Poblacion');
+          }
+        })();
+        setSelectByText(document.getElementById('dist'),'1st');
+        setValue('zip','6100');
+        setSelectByText(document.getElementById('nationality'),'Filipino');
+        setValue('contact-number','09171234567');
+        setValue('email-address',`tester${Date.now()}@example.com`);
+
+        // Personal
+        setRadio('gender','Male');
+        setRadio('civil-status','Single');
+        setRadio('employement','Unemployed');
+        setValue('birthdate','1998-05-17');
+
+        // Birthplace
+        await fillCascading('birthplace-region','birthplace-province','birthplace-pmuni');
+
+        // Educational Attainment
+        const eduId = 'college-undergraduate';
+        const eduEl = document.getElementById(eduId); if(eduEl){ eduEl.checked = true; dispatchChange(eduEl); }
+
+        // Parent/Guardian
+        setValue('plname','Dela Cruz');
+        setValue('pfname','Maria');
+        setValue('pmname','Reyes');
+        setSelectByText(document.getElementById('psname'),'None');
+        setValue('pcontact','09181234567');
+
+        // Parent Address
+        await fillCascading('pregion','pprovince','pmuni');
+        (function(){
+          const input = document.querySelector('input[list="pnumber-street"]');
+          const list = document.getElementById('pnumber-street');
+          if (input && list && list.options && list.options.length > 0) {
+            input.value = list.options[0].value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          } else {
+            setValue('pnumber-street','Poblacion');
+          }
+        })();
+        setValue('pzip','6100');
+        setSelectByText(document.getElementById('pdist'),'1st');
+
+        // Classifications
+        setCheckbox('student', true);
+        setCheckbox('youth', true);
+        setCheckbox('iWorkers', true);
+      }catch(e){ console.error('Autofill error:', e); }
+    }
+
+    function clearForm(){
+      const form = document.getElementById('registrationForm');
+      if(!form) return;
+      form.reset();
+      // Clear selects to placeholder
+      ['region','province','muni','birthplace-region','birthplace-province','birthplace-pmuni','pregion','pprovince','pmuni'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){ el.selectedIndex = 0; dispatchChange(el); }
+      });
+      // Clear dynamic datalists
+      const ns = document.getElementById('number-street'); if(ns) ns.innerHTML='';
+      const pns = document.getElementById('pnumber-street'); if(pns) pns.innerHTML='';
+    }
+
+    const btn = document.getElementById('autofillTestDataBtn');
+    if(btn){ btn.addEventListener('click', autofillTestData); }
+    const clr = document.getElementById('clearFormBtn');
+    if(clr){ clr.addEventListener('click', clearForm); }
+  })();
+  <?php endif; ?>
 
   document.addEventListener("DOMContentLoaded", function() {
   if (localStorage.getItem("privacyAccepted") === "true") {

@@ -432,9 +432,133 @@ class AdminController extends Controller
             $file->move(public_path('assets/partners_logo/'), $newName);
             $partner->logo = $newName;
         }
-
         $partner->save();
         return redirect()->back()->with('success','Partner updated successfully');
+    }
+
+    // DEBUG: Generate sample students for Negros Island (Negros Occidental/Negros Oriental)
+    public function generateRegion6Students(Request $request)
+    {
+        if (!config('app.debug')) {
+            abort(403, 'Not available in production');
+        }
+
+        $data = $request->validate([
+            'count' => 'nullable|integer|min:1|max:200',
+        ]);
+
+        $count = $data['count'] ?? 30;
+
+        // Ensure we have at least one program to assign
+        $programIds = Programs::pluck('id')->all();
+        if (empty($programIds)) {
+            return redirect()->back()->with('error', 'No programs found. Add a program first.');
+        }
+
+        // Load PH regions/provinces/cities data
+        $jsonPath = public_path('js/philippine_provinces_cities_municipalities_and_barangays_2019v2.json');
+        if (!file_exists($jsonPath)) {
+            return redirect()->back()->with('error', 'Geographic JSON not found.');
+        }
+
+        $geo = json_decode(file_get_contents($jsonPath), true);
+        if (!$geo) {
+            return redirect()->back()->with('error', 'Failed to parse geographic JSON.');
+        }
+
+        // Build a province map limited to Negros Island only
+        $allowedProvinces = ['NEGROS OCCIDENTAL', 'NEGROS ORIENTAL'];
+        $provinceMap = [];
+        foreach (['06','07'] as $regionCode) {
+            if (!isset($geo[$regionCode]['province_list'])) { continue; }
+            foreach ($geo[$regionCode]['province_list'] as $provinceName => $data) {
+                if (in_array($provinceName, $allowedProvinces, true)) {
+                    $provinceMap[$provinceName] = [
+                        'region_name' => $geo[$regionCode]['region_name'] ?? 'REGION',
+                        'municipality_list' => $data['municipality_list'] ?? []
+                    ];
+                }
+            }
+        }
+        if (empty($provinceMap)) {
+            return redirect()->back()->with('error', 'Negros Island province data not available.');
+        }
+        $provinces = array_keys($provinceMap);
+
+        $firstNames = ['Juan','Maria','Jose','Ana','Pedro','Luisa','Mark','Anne','Carlos','Elena','Victor','Rosa'];
+        $middleNames = ['Santos','Reyes','Garcia','Lopez','Cruz','Rivera','Torres','Ramos'];
+        $lastNames = ['Dela Cruz','Santos','Garcia','Reyes','Lopez','Rivera','Torres','Ramos','Domingo','Fernandez'];
+        $genders = ['Male','Female'];
+        $civilStatuses = ['Single','Married'];
+        $employmentStatuses = ['Unemployed','Employed'];
+        $districts = ['1st','2nd','3rd','4th'];
+
+        $created = 0;
+        for ($i = 0; $i < $count; $i++) {
+            try {
+                // Random name and program
+                $fname = $firstNames[array_rand($firstNames)];
+                $mname = $middleNames[array_rand($middleNames)];
+                $lname = $lastNames[array_rand($lastNames)];
+                $suffix = 'None';
+                $programId = $programIds[array_rand($programIds)];
+
+                // Random province and city/municipality
+                $province = $provinces[array_rand($provinces)];
+                $municipalities = array_keys($provinceMap[$province]['municipality_list']);
+                if (empty($municipalities)) { continue; }
+                $city = $municipalities[array_rand($municipalities)];
+
+                // Pick a barangay as a stand-in for number/street
+                $barangays = $provinceMap[$province]['municipality_list'][$city]['barangay_list'] ?? [];
+                $barangay = !empty($barangays) ? $barangays[array_rand($barangays)] : 'Poblacion';
+                $street = 'Brgy ' . $barangay;
+
+                // Other fields
+                $gender = $genders[array_rand($genders)];
+                $civil = $civilStatuses[array_rand($civilStatuses)];
+                $employment = $employmentStatuses[array_rand($employmentStatuses)];
+                $district = $districts[array_rand($districts)];
+                $zip = random_int(6000, 6999);
+                $birthYear = random_int(1990, 2004);
+                $birthMonth = str_pad((string)random_int(1, 12), 2, '0', STR_PAD_LEFT);
+                $birthDay = str_pad((string)random_int(1, 28), 2, '0', STR_PAD_LEFT);
+                $birthdate = "$birthYear-$birthMonth-$birthDay";
+                $email = 'debug.reg6.' . uniqid() . '@example.test';
+                $contact = '09' . random_int(100000000, 999999999);
+
+                Students::create([
+                    'id_program'     => $programId,
+                    'fname'          => strtolower($fname),
+                    'mname'          => strtolower($mname),
+                    'lname'          => strtolower($lname),
+                    'sname'          => strtolower($suffix),
+                    'street_number'  => $street,
+                    'city'           => $city,
+                    'district'       => $district,
+                    'zipcode'        => (string) $zip,
+                    'email'          => $email,
+                    'gender'         => $gender,
+                    'civil_status'   => $civil,
+                    'employment'     => $employment,
+                    'birthdate'      => $birthdate,
+                    'nationality'    => 'Filipino',
+                    'contact_number' => $contact,
+                    'birthplace'     => $city,
+                    'education'      => 'College Undergraduate',
+                    'region'         => $provinceMap[$province]['region_name'],
+                    'province'       => $province,
+                    'status'         => 0,
+                ]);
+
+                $created++;
+            } catch (\Throwable $e) {
+                // Continue on errors to create as many as possible
+                continue;
+            }
+        }
+
+        return redirect()->back()->with('success', "Generated {$created} Region VI test students.");
     }
 
     public function adminUpdates() 
@@ -520,6 +644,16 @@ class AdminController extends Controller
         $update->save();
 
         return redirect()->back()->with('success', 'Update status updated successfully.');
+    }
+
+    // DEBUG: Remove all debug students generated (by email prefix debug.reg6.)
+    public function removeDebugStudents()
+    {
+        if (!config('app.debug')) {
+            abort(403, 'Not available in production');
+        }
+        $deleted = Students::where('email','like','debug.reg6.%@example.test')->delete();
+        return redirect()->back()->with('success', "Removed {$deleted} debug students.");
     }
 
     public function parseFacebookEmbed(Request $request)

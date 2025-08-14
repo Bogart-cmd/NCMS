@@ -18,7 +18,12 @@
     html, body, button, input, select, textarea { 
       font-family: var(--font-primary) !important; 
     }
+    /* Ensure admin pages remain scrollable regardless of global overrides */
+    /* Keep admin pages scrollable even if frontend uses body-only scrolling */
+    html { overflow-y: auto !important; }
+    body { overflow-y: auto !important; overscroll-behavior-y: contain; }
   </style>
+  <link rel="stylesheet" href="/css/header-footer.css?v=<?php echo e(time()); ?>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="//unpkg.com/alpinejs" defer></script>
 

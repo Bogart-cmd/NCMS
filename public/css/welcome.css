@@ -22,9 +22,7 @@ body {
     overflow-x: hidden;
 }
 
-body::-webkit-scrollbar {
-    display: none;
-}
+/* Allow custom scrollbar globally (handled in header-footer.css) */
 
 header {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -1528,7 +1526,7 @@ a{
 .hero-split {
     display: flex;
     width: 100%;
-    min-height: 100vh;
+    min-height: auto;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -1549,7 +1547,7 @@ a{
 .hero-left, .hero-right {
     flex: 1 1 50%;
     width: 50%;
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1563,7 +1561,7 @@ a{
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: auto;
     min-height: 600px;
     animation: slideInLeft 1.2s ease-out;
 }
@@ -1641,7 +1639,7 @@ a{
     z-index: 1;
     animation: slideInRight 1.2s ease-out;
     overflow: hidden;
-    height: 100vh;
+    height: auto;
     min-height: 600px;
 }
 
@@ -1726,11 +1724,11 @@ a{
 @media (max-width: 900px) {
     .hero-split {
         flex-direction: column;
-        min-height: 100vh;
+        min-height: auto;
     }
     .hero-left, .hero-right {
         width: 100%;
-        min-height: 50vh;
+        min-height: auto;
     }
     .hero-content {
         align-items: flex-start;
@@ -1955,10 +1953,17 @@ a{
     
     nav.active {
         display: block;
-        max-height: 300px;
+        position: fixed;
+        top: 76px; /* approx header height */
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 60vh;
+        overflow-y: auto;
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: none;
         pointer-events: auto;
+        z-index: 10040;
     }
     
     nav ul {
@@ -2005,7 +2010,7 @@ a{
     /* Hero section mobile styles */
     .hero-split {
         flex-direction: column;
-        min-height: 100vh;
+        min-height: auto;
     }
     
     .hero-left, .hero-right {
@@ -2220,11 +2225,11 @@ a{
     
     /* Hero section for very small screens */
     .hero-split {
-        min-height: 100vh;
+        min-height: auto;
     }
     
     .hero-left, .hero-right {
-        min-height: 50vh;
+        min-height: auto;
     }
     
     .hero-content {
