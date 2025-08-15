@@ -8,15 +8,21 @@
     <main class="about-wrapper">
 
     <div class="history about-card">
-        <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot">
-        <h2 class="nolitic">HISTORY OF NOLITC</h2>
-        <p class="address">To address the gap in the human resource requirements of BPO companies relocating in Negros Occidental, the provincial government under the leadership of the late Governor Joseph G. Marañon established the Negros Occidental Language and Information Technology Center in 2008. It was created pursuant to Sangguniang Panlalawigan Ordinance No. 001, series of 2008.With Marañon’s untimely demise in March 12, 2009, former Governor Isidro P. Zayco took over and continued the legacy program of his predecessor.The training center was inaugurated in September 15, 2009 as a division under the Economic Enterprise Development Department of the Provincial Government.
-            In 2010, the Technological Education and Skills Development Authority (TESDA) granted authority to the center to offer English Language Proficiency and Contact Center Services NC II.</p>
+        <div class="history-content">
+            <div class="history-text">
+                <h2 class="nolitic">HISTORY OF NOLITC</h2>
+                <p class="address">To address the gap in the human resource requirements of BPO companies relocating in Negros Occidental, the provincial government under the leadership of the late Governor Joseph G. Marañon established the Negros Occidental Language and Information Technology Center in 2008. It was created pursuant to Sangguniang Panlalawigan Ordinance No. 001, series of 2008.With Marañon's untimely demise in March 12, 2009, former Governor Isidro P. Zayco took over and continued the legacy program of his predecessor.The training center was inaugurated in September 15, 2009 as a division under the Economic Enterprise Development Department of the Provincial Government.
+                    In 2010, the Technological Education and Skills Development Authority (TESDA) granted authority to the center to offer English Language Proficiency and Contact Center Services NC II.</p>
 
-            <p class="second">In October 2011, the training center started the implementation of the Training for Work Scholarship Program (TWSP) in partnership with TESDA and the Industry-Training for Work Scholarship Program (I-TWSP) in collaboration with the National ICT Confederation of the Philippines (NICP), Business Processing Association of the Philippines and Bacolod-Negros Federation for ICT.</p>
+                    <p class="second">In October 2011, the training center started the implementation of the Training for Work Scholarship Program (TWSP) in partnership with TESDA and the Industry-Training for Work Scholarship Program (I-TWSP) in collaboration with the National ICT Confederation of the Philippines (NICP), Business Processing Association of the Philippines and Bacolod-Negros Federation for ICT.</p>
 
-            <p class="third">Since then, it has produced two thousand graduates in the call center training and other programs, 70 percent of which, have had gainful employment in the BPO industry and other companies.</p>
+                    <p class="third">Since then, it has produced two thousand graduates in the call center training and other programs, 70 percent of which, have had gainful employment in the BPO industry and other companies.</p>
+            </div>
+            <div class="mascot-container">
+                <img src="image-website/mascot.png" alt="NOLITC Mascot" class="mascot">
+            </div>
         </div>
+    </div>
 
         <hr class="line">
 

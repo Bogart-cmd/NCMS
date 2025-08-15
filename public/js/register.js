@@ -146,6 +146,7 @@ function city(region,province){
 }
 
 function numberStreet(region,province,numberStreet){
+    numberstreet_.innerHTML = '';
     fetch("js/philippine_provinces_cities_municipalities_and_barangays_2019v2.json")
         .then(response => response.json())
         .then(result => (
@@ -220,7 +221,7 @@ function birthplace_city(region,province){
 }
 
 function pregions(){
-    pregion
+    // populate parent regions select
     fetch("js/philippine_provinces_cities_municipalities_and_barangays_2019v2.json")
     .then(response => response.json())
     .then(result =>
@@ -229,7 +230,7 @@ function pregions(){
             option.value = result[key].region_name;
             option.dataset.id = key
             option.textContent = result[key].region_name
-            pregion.appendChild(option);
+            pregions_.appendChild(option);
         })
     )
     .catch(error => console.log('error', error));
@@ -273,6 +274,7 @@ function pcity(region,province){
 }
 
 function pnumberStreet_com(region,province,numberStreet){
+    pnumberstreet_com_.innerHTML = '';
     fetch("js/philippine_provinces_cities_municipalities_and_barangays_2019v2.json")
         .then(response => response.json())
         .then(result => (

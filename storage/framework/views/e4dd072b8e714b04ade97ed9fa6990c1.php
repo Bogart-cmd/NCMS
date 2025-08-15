@@ -25,7 +25,7 @@
           <h3>Preferred Program</h3>
            <?php echo csrf_field(); ?>
           <div class="input-data full">
-            <label for="qualification" class="label-input-tag">Program *</label>
+            <label for="qualification" class="label-input-tag">Program@required('program')</label>
             <select name="program" id="qualification" class="qualification-select">
                 <?php $__currentLoopData = $programs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $program): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($program->id); ?>"  <?php echo e(old('program')===$program->id?'selected':''); ?>><?php echo e($program->name); ?></option>
@@ -48,7 +48,7 @@ unset($__errorArgs, $__bag); ?>
           <h3>Learner Profile/Manpower Profile</h3>
           <div class="content-info">
             <div class="input-data">
-              <label for="lname" class="label-input-tag">Last Name *</label>
+              <label for="lname" class="label-input-tag">Last Name@required('lname')</label>
               <input type="text" id="lname" name="lname" placeholder="Last Name" value="<?php echo e(old('lname')); ?>">
               <?php $__errorArgs = ['lname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -62,7 +62,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="fname" class="label-input-tag">First Name *</label>
+              <label for="fname" class="label-input-tag">First Name@required('fname')</label>
               <input type="text" id="fname" name="fname" placeholder="First Name" value="<?php echo e(old('fname')); ?>">
               <?php $__errorArgs = ['fname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -76,7 +76,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="mname" class="label-input-tag">Middle Name *</label>
+              <label for="mname" class="label-input-tag">Middle Name@required('mname')</label>
               <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?php echo e(old('mname')); ?>">
               <?php $__errorArgs = ['mname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -90,7 +90,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="suffix" class="label-input-tag">Suffix *</label>
+              <label for="suffix" class="label-input-tag">Suffix@required('suffix')</label>
               <select id="suffix" name="suffix">
                 <option value="" selected disabled>Select Suffix</option>
                 <option value="Jr." <?php echo e(old('suffix') == 'Jr.' ? 'selected' : ''); ?>>Jr.</option>
@@ -118,7 +118,7 @@ unset($__errorArgs, $__bag); ?>
           <h3>Complete Permanent Mailing Address</h3>
           <div class="content-info">
             <div class="input-data">
-                <label for="region" class="label-input-tag">Region  *</label>
+                <label for="region" class="label-input-tag">Region@required('region')</label>
                 <select id="region" name="region" class="region">
                     <option value='' selected disabled>Select region</option>
                 </select>
@@ -134,7 +134,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-                <label for="province" class="label-input-tag">Province *</label>
+                <label for="province" class="label-input-tag">Province@required('province')</label>
                 <select id="province" name="province" class="province" disabled>
                     <option value='' selected>Select Province</option>
                 </select>
@@ -150,7 +150,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-                <label for="muni" class="label-input-tag">City/Municipality *</label>
+                <label for="muni" class="label-input-tag">City/Municipality@required('city-municipality')</label>
                 <select id="muni" name="city-municipality" class="city-municipality" disabled>
                     <option value='' selected>Select City/Municipality</option>
                 </select>
@@ -338,19 +338,19 @@ unset($__errorArgs, $__bag); ?>
                   <label for="widow-er">Widow/er</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="seperated" name="civil-status" value="Seperated" <?php echo e(old('civil-status')==='Seperated'?'checked':''); ?>>
-                  <label for="seperated">Seperated</label>
+                  <input class="radio-input c-status" type="radio" id="separated" name="civil-status" value="Separated" <?php echo e(old('civil-status')==='Separated'?'checked':''); ?>>
+                  <label for="separated">Separated</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="soloParent" name="civil-status" value="SoloParent" <?php echo e(old('civil-status')==='SoloParent'?'checked':''); ?>>
-                  <label for="soloParent">SoloParent</label>
+                  <input class="radio-input c-status" type="radio" id="solo-parent" name="civil-status" value="Solo Parent" <?php echo e(old('civil-status')==='Solo Parent'?'checked':''); ?>>
+                  <label for="solo-parent">Solo Parent</label>
                 </div>
               </div>
             </div>
 
             <div class="input-data">
-              <label for="employment-status" class="label-input-tag">Civil Status *</label>
-              <?php $__errorArgs = ['employement'];
+              <label for="employment-status" class="label-input-tag">Employment Status *</label>
+              <?php $__errorArgs = ['employment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -362,11 +362,11 @@ endif;
 unset($__errorArgs, $__bag); ?>
               <div id="employment-status" class="radio radio-employment-status">
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="employed" name="employement" value="Employed"  <?php echo e(old('employement')==='Employed'?'checked':''); ?>>
+                  <input class="radio-input employment" type="radio" id="employed" name="employment" value="Employed"  <?php echo e(old('employment')==='Employed'?'checked':''); ?>>
                   <label for="employed">Employed</label>
                 </div>
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="unemployed" name="employement" value="Unemployed" <?php echo e(old('employement')==='Unemployed'?'checked':''); ?>>
+                  <input class="radio-input employment" type="radio" id="unemployed" name="employment" value="Unemployed" <?php echo e(old('employment')==='Unemployed'?'checked':''); ?>>
                   <label for="unemployed">Unemployed</label>
                 </div>
               </div>
@@ -375,29 +375,25 @@ unset($__errorArgs, $__bag); ?>
         </div>
 
         <div class="inputs birthdate">
-          <h3>Birthdate</h3>
-          <div class="input-data">
-            <label for="birthdate" class="label-input-tag">Date of Birth *</label>
-            <input type="date" name="birthdate" id="birthdate" value="<?php echo e(old('birthdate')); ?>" min="1900-01-01" max="<?php echo e(date('Y-m-d')); ?>" autocomplete="bday">
-            <div class="form-help">Format: MM/DD/YYYY</div>
-            <?php $__errorArgs = ['birthdate'];
+          <h3>Birth Information</h3>
+          <div class="content-info">
+            <div class="input-data">
+              <label for="birthdate" class="label-input-tag">Date of Birth *</label>
+              <input type="date" name="birthdate" id="birthdate" value="<?php echo e(old('birthdate')); ?>" min="1900-01-01" max="<?php echo e(date('Y-m-d')); ?>" autocomplete="bday">
+              <div class="form-help">Format: MM/DD/YYYY</div>
+              <?php $__errorArgs = ['birthdate'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <p class="error"><?php echo e($message); ?></p>
-            <?php unset($message);
+              <p class="error"><?php echo e($message); ?></p>
+              <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-          </div>
-        </div>
-
-        <div class="inputs birthdate">
-          <h3>Birthplace</h3>
-          <div class="content-info">
+            </div>
             <div class="input-data">
-                <label for="birthplace-region" class="label-input-tag">Region  *</label>
+                <label for="birthplace-region" class="label-input-tag">Birthplace Region *</label>
                 <select id="birthplace-region" name="birthplace-region" class="region">
                     <option value='' selected disabled>Select region</option>
                 </select>
@@ -413,7 +409,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-                <label for="birthplace-province" class="label-input-tag">Province *</label>
+                <label for="birthplace-province" class="label-input-tag">Birthplace Province *</label>
                 <select id="birthplace-province" name="birthplace-province" class="province" disabled>
                     <option value='' selected disabled>Select Province</option>
                 </select>
@@ -429,7 +425,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-            <label for="birthplace-pmuni" class="label-input-tag">City/Municipality *</label>
+            <label for="birthplace-pmuni" class="label-input-tag">Birthplace City/Municipality *</label>
             <select id="birthplace-pmuni" name="birthplace-pcity-municipality" class="city-municipality" disabled>
                 <option value='' selected>Select City</option>
             </select>
@@ -445,7 +441,6 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
           </div>
-
         </div>
 
         <div class="inputs Trainee">
@@ -552,8 +547,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="pmname" class="label-input-tag">Middlename *</label>
-              <input type="text" id="pmname" name="pmname" placeholder="Middlename" value="<?php echo e(old('pmname')); ?>">
+              <label for="pmname" class="label-input-tag">Middle Name *</label>
+              <input type="text" id="pmname" name="pmname" placeholder="Middle Name" value="<?php echo e(old('pmname')); ?>">
               <?php $__errorArgs = ['pmname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -566,9 +561,9 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="psname" class="label-input-tag">Suffix Name *</label>
+              <label for="psname" class="label-input-tag">Suffix *</label>
               <select id="psname" name="psname">
-                <option value="" selected disabled>Select Suffix Name</option>
+                <option value="" selected disabled>Select Suffix</option>
                 <option value="Jr." <?php echo e(old('psname') == 'Jr.' ? 'selected' : ''); ?>>Jr.</option>
                 <option value="Sr." <?php echo e(old('psname') == 'Sr.' ? 'selected' : ''); ?>>Sr.</option>
                 <option value="II" <?php echo e(old('psname') == 'II' ? 'selected' : ''); ?>>II</option>
@@ -1016,7 +1011,7 @@ unset($__errorArgs, $__bag); ?>
         // Personal
         setRadio('gender','Male');
         setRadio('civil-status','Single');
-        setRadio('employement','Unemployed');
+        setRadio('employment','Unemployed');
         setValue('birthdate','1998-05-17');
 
         // Birthplace

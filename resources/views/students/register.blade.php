@@ -230,28 +230,28 @@
                   <label for="widow-er">Widow/er</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="seperated" name="civil-status" value="Seperated" {{old('civil-status')==='Seperated'?'checked':''}}>
-                  <label for="seperated">Seperated</label>
+                  <input class="radio-input c-status" type="radio" id="separated" name="civil-status" value="Separated" {{old('civil-status')==='Separated'?'checked':''}}>
+                  <label for="separated">Separated</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="soloParent" name="civil-status" value="SoloParent" {{old('civil-status')==='SoloParent'?'checked':''}}>
-                  <label for="soloParent">SoloParent</label>
+                  <input class="radio-input c-status" type="radio" id="solo-parent" name="civil-status" value="Solo Parent" {{old('civil-status')==='Solo Parent'?'checked':''}}>
+                  <label for="solo-parent">Solo Parent</label>
                 </div>
               </div>
             </div>
 
             <div class="input-data">
-              <label for="employment-status" class="label-input-tag">Civil Status *</label>
-              @error('employement')
+              <label for="employment-status" class="label-input-tag">Employment Status *</label>
+              @error('employment')
               <p class="error">{{$message}}</p>
               @enderror
               <div id="employment-status" class="radio radio-employment-status">
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="employed" name="employement" value="Employed"  {{old('employement')==='Employed'?'checked':''}}>
+                  <input class="radio-input employment" type="radio" id="employed" name="employment" value="Employed"  {{old('employment')==='Employed'?'checked':''}}>
                   <label for="employed">Employed</label>
                 </div>
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="unemployed" name="employement" value="Unemployed" {{old('employement')==='Unemployed'?'checked':''}}>
+                  <input class="radio-input employment" type="radio" id="unemployed" name="employment" value="Unemployed" {{old('employment')==='Unemployed'?'checked':''}}>
                   <label for="unemployed">Unemployed</label>
                 </div>
               </div>
@@ -260,22 +260,18 @@
         </div>
 
         <div class="inputs birthdate">
-          <h3>Birthdate</h3>
-          <div class="input-data">
-            <label for="birthdate" class="label-input-tag">Date of Birth *</label>
-            <input type="date" name="birthdate" id="birthdate" value="{{old('birthdate')}}" min="1900-01-01" max="{{ date('Y-m-d') }}" autocomplete="bday">
-            <div class="form-help">Format: MM/DD/YYYY</div>
-            @error('birthdate')
-            <p class="error">{{$message}}</p>
-            @enderror
-          </div>
-        </div>
-
-        <div class="inputs birthdate">
-          <h3>Birthplace</h3>
+          <h3>Birth Information</h3>
           <div class="content-info">
             <div class="input-data">
-                <label for="birthplace-region" class="label-input-tag">Region  *</label>
+              <label for="birthdate" class="label-input-tag">Date of Birth *</label>
+              <input type="date" name="birthdate" id="birthdate" value="{{old('birthdate')}}" min="1900-01-01" max="{{ date('Y-m-d') }}" autocomplete="bday">
+              <div class="form-help">Format: MM/DD/YYYY</div>
+              @error('birthdate')
+              <p class="error">{{$message}}</p>
+              @enderror
+            </div>
+            <div class="input-data">
+                <label for="birthplace-region" class="label-input-tag">Birthplace Region *</label>
                 <select id="birthplace-region" name="birthplace-region" class="region">
                     <option value='' selected disabled>Select region</option>
                 </select>
@@ -284,7 +280,7 @@
                 @enderror
             </div>
             <div class="input-data">
-                <label for="birthplace-province" class="label-input-tag">Province *</label>
+                <label for="birthplace-province" class="label-input-tag">Birthplace Province *</label>
                 <select id="birthplace-province" name="birthplace-province" class="province" disabled>
                     <option value='' selected disabled>Select Province</option>
                 </select>
@@ -293,7 +289,7 @@
                 @enderror
             </div>
             <div class="input-data">
-            <label for="birthplace-pmuni" class="label-input-tag">City/Municipality *</label>
+            <label for="birthplace-pmuni" class="label-input-tag">Birthplace City/Municipality *</label>
             <select id="birthplace-pmuni" name="birthplace-pcity-municipality" class="city-municipality" disabled>
                 <option value='' selected>Select City</option>
             </select>
@@ -302,7 +298,6 @@
             @enderror
             </div>
           </div>
-
         </div>
 
         <div class="inputs Trainee">
@@ -388,16 +383,16 @@
               @enderror
             </div>
             <div class="input-data">
-              <label for="pmname" class="label-input-tag">Middlename *</label>
-              <input type="text" id="pmname" name="pmname" placeholder="Middlename" value="{{old('pmname')}}">
+              <label for="pmname" class="label-input-tag">Middle Name *</label>
+              <input type="text" id="pmname" name="pmname" placeholder="Middle Name" value="{{old('pmname')}}">
               @error('pmname')
               <p class="error">{{$message}}</p>
               @enderror
             </div>
             <div class="input-data">
-              <label for="psname" class="label-input-tag">Suffix Name *</label>
+              <label for="psname" class="label-input-tag">Suffix *</label>
               <select id="psname" name="psname">
-                <option value="" selected disabled>Select Suffix Name</option>
+                <option value="" selected disabled>Select Suffix</option>
                 <option value="Jr." {{ old('psname') == 'Jr.' ? 'selected' : '' }}>Jr.</option>
                 <option value="Sr." {{ old('psname') == 'Sr.' ? 'selected' : '' }}>Sr.</option>
                 <option value="II" {{ old('psname') == 'II' ? 'selected' : '' }}>II</option>
@@ -782,7 +777,7 @@
         // Personal
         setRadio('gender','Male');
         setRadio('civil-status','Single');
-        setRadio('employement','Unemployed');
+        setRadio('employment','Unemployed');
         setValue('birthdate','1998-05-17');
 
         // Birthplace

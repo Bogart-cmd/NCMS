@@ -28,24 +28,37 @@ body {
 /* Remove old polygon back icon usage */
 .polygon{ display: none; }
 
-/* berto */
-.about .mascot {
-    height: clamp(200px, 35vw, 300px) !important; /* Much bigger for testing */
-    max-width: 100%;
-    object-fit: contain;
-    animation: fadeInLeft 1s ease-out;
-    align-self: flex-start;
-    justify-self: flex-start;
-    position: relative;
-    left: 0;
-    top: 0;
-    margin-left: 0;
-    margin-right: auto;
-}
+/* berto - removed old mascot styling */
 
 /* history */
 
 .history{ background-color: rgb(253, 255, 232); }
+
+.history-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.history-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.mascot-container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history .mascot {
+    height: clamp(150px, 25vw, 250px);
+    max-width: 100%;
+    object-fit: contain;
+    animation: fadeInRight 1s ease-out;
+}
 
 .history .nolitic{ color:#168753; font-weight:900; font-size: clamp(1.5rem, 4vw, 2.5rem); margin: 0.5rem 0; }
 
@@ -65,6 +78,27 @@ body {
     font-size: clamp(1rem, 2.2vw, 1.1rem);
     text-align: justify;
     line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .history-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .history-text {
+        order: 2;
+    }
+    
+    .mascot-container {
+        order: 1;
+        margin-bottom: 1rem;
+    }
+    
+    .history .mascot {
+        height: clamp(120px, 20vw, 200px);
+    }
 }
 /* end */
 

@@ -15,29 +15,29 @@ class StudentsController extends Controller
     public function registerStudent(Request $request){
 
         $data = $request->validate([ //data validation
-           "program"=> 'required',
+           "program"=> 'required|numeric',
            'lname'=> 'required',
            'fname'=> 'required',
            'mname'=> 'required',
-           'suffix'=> 'required',
+           'suffix'=> 'nullable',
            'number-street'=> 'required',
            'region'=> 'required',
            'province'=> 'required',
            'city-municipality'=> 'required',
            'district'=>'required',
-           'zip'=> 'required|numeric',
+           'zip'=> 'required|digits:4',
            'pnumber-street'=> 'required',
            'pregion'=> 'required',
            'pprovince'=> 'required',
            'pcity-municipality'=> 'required',
            'pdistrict'=>'required',
-           'pzip'=> 'required|numeric',
+           'pzip'=> 'required|digits:4',
             'nationality'=> 'required',
             'contact-number'=> 'required|numeric|digits:11',
             'email'=> 'required|email',
             'gender'=> 'required',
             'civil-status'=> 'required',
-            'employement'=> 'required',
+            'employment'=> 'required',
             'birthdate'=> 'required|before:today|date',
             'birthplace-region'=> 'required',
             'birthplace-province'=> 'required',
@@ -46,7 +46,7 @@ class StudentsController extends Controller
             'plname'=> 'required',
             'pfname'=> 'required',
             'pmname'=> 'required',
-            'psname'=> 'required',
+            'psname'=> 'nullable',
             'pcontact'=> 'required|numeric|digits:11',
             'classification'=> 'required|array|min:1',
         ]);
@@ -60,34 +60,34 @@ class StudentsController extends Controller
             'lname'             => 'required',
             'fname'             => 'required',
             'mname'             => 'required',
-            'suffix'            => 'required',
+            'suffix'            => 'nullable',
             'number-street'     => 'required',
             'region'            => 'required',
             'province'          => 'required',
             'city-municipality' => 'required',
             'district'          => 'required',
-            'zip'               => 'required|numeric',
+            'zip'               => 'required|digits:4',
             'pnumber-street'    => 'required',
             'pregion'           => 'required',
             'pprovince'         => 'required',
             'pcity-municipality'=> 'required',
             'pdistrict'         => 'required',
-            'pzip'              => 'required|numeric',
+            'pzip'              => 'required|digits:4',
             'nationality'       => 'required',
             'contact-number'    => 'required|numeric|digits:11',
             'email'             => 'required|email',
             'gender'            => 'required',
             'civil-status'      => 'required',
-            'employement'       => 'required',
+            'employment'        => 'required',
             'birthdate'         => 'required|before:today|date',
             'birthplace-region' => 'required',
             'birthplace-province'=> 'required',
-            'birthplace-pcity-municipality'=> 'req  uired',
+            'birthplace-pcity-municipality'=> 'required',
             'trainee'           => 'required',
             'plname'            => 'required',
             'pfname'            => 'required',
             'pmname'            => 'required',
-            'psname'            => 'required',
+            'psname'            => 'nullable',
             'pcontact'          => 'required|numeric|digits:11',
             'classification'    => 'required|array|min:1',
         ]);
@@ -124,7 +124,7 @@ class StudentsController extends Controller
             'fname'         => strtolower($data['fname']),
             'lname'         => strtolower($data['lname']),
             'mname'         => strtolower($data['mname']),
-            'sname'         => strtolower($data['suffix']),
+            'sname'         => isset($data['suffix']) ? strtolower($data['suffix']) : null,
             'street_number' => $data['number-street'],
             'city'          => $data['city-municipality'],
             'district'      => $data['district'],
@@ -132,7 +132,7 @@ class StudentsController extends Controller
             'email'         => $data['email'],
             'gender'        => $data['gender'],
             'civil_status'  => $data['civil-status'],
-            'employment'    => $data['employement'],
+            'employment'    => $data['employment'],
             'birthdate'     => $data['birthdate'],
             'nationality'   => $data['nationality'],
             'contact_number'=> $data['contact-number'],
@@ -140,31 +140,33 @@ class StudentsController extends Controller
             'education'     => $data['trainee'],
             'region'        => $data['region'],
             'province'      => $data['province'],
-            'status'        => '0', // default status is pending
+            'status'        => 0, // default status is pending
         ];
     
-        $newStudent = Students::create($student);
-        
-        $parents = [
-            'students_id' => $newStudent->id,
-            'plname' => $data['plname'],
-            'pfname' => $data['pfname'],
-            'pmname' => $data['pmname'],
-            'psname' => $data['psname'],
-            'pcontact_number' => $data['pcontact'],
-            'pstreet_number' => $data['pnumber-street'],
-            'pmunicipality' => $data['pcity-municipality'],
-            'pdistrict' => $data['pdistrict'],
-            'pzipcode' => $data['zip']
-        ];
-        Parents::create($parents);
-    
-        foreach($data['classification'] as $classification){
-            Classification::create([
+        DB::transaction(function () use ($data, $student) {
+            $newStudent = Students::create($student);
+
+            $parents = [
                 'students_id' => $newStudent->id,
-                'classification_data' => $classification
-            ]);
-        }
+                'plname' => $data['plname'],
+                'pfname' => $data['pfname'],
+                'pmname' => $data['pmname'],
+                'psname' => $data['psname'],
+                'pcontact_number' => $data['pcontact'],
+                'pstreet_number' => $data['pnumber-street'],
+                'pmunicipality' => $data['pcity-municipality'],
+                'pdistrict' => $data['pdistrict'],
+                'pzipcode' => $data['pzip'],
+            ];
+            Parents::create($parents);
+
+            foreach ($data['classification'] as $classification) {
+                Classification::create([
+                    'students_id' => $newStudent->id,
+                    'classification_data' => $classification
+                ]);
+            }
+        });
     
         event(new PusherBroadcast('Applicant name: ' . $student['fname']));
     

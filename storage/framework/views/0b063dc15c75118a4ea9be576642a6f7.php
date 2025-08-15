@@ -308,19 +308,19 @@ unset($__errorArgs, $__bag); ?>
                   <label for="widow-er">Widow/er</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="seperated" name="civil-status" value="Seperated" <?php echo e($data['civil-status']==='Seperated'?'checked':''); ?> disabled>
-                  <label for="seperated">Seperated</label>
+                  <input class="radio-input c-status" type="radio" id="separated" name="civil-status" value="Separated" <?php echo e($data['civil-status']==='Separated'?'checked':''); ?> disabled>
+                  <label for="separated">Separated</label>
                 </div>
                 <div class="radio radio-input-civil-status">
-                  <input class="radio-input c-status" type="radio" id="soloParent" name="civil-status" value="SoloParent" <?php echo e($data['civil-status']==='SoloParent'?'checked':''); ?> disabled>
-                  <label for="soloParent">SoloParent</label>
+                  <input class="radio-input c-status" type="radio" id="solo-parent" name="civil-status" value="Solo Parent" <?php echo e($data['civil-status']==='Solo Parent'?'checked':''); ?> disabled>
+                  <label for="solo-parent">Solo Parent</label>
                 </div>
               </div>
             </div>
 
             <div class="input-data">
-              <label for="employment-status" class="label-input-tag">Civil Status *</label>
-              <?php $__errorArgs = ['employement'];
+              <label for="employment-status" class="label-input-tag">Employment Status *</label>
+              <?php $__errorArgs = ['employment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -332,11 +332,11 @@ endif;
 unset($__errorArgs, $__bag); ?>
               <div id="employment-status" class="radio radio-employment-status">
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="employed" name="employement" value="Employed"  <?php echo e($data['employement']==='Employed'?'checked':''); ?> disabled>
+                  <input class="radio-input employment" type="radio" id="employed" name="employment" value="Employed"  <?php echo e($data['employment']==='Employed'?'checked':''); ?> disabled>
                   <label for="employed">Employed</label>
                 </div>
                 <div class="radio radio-input-employment-status">
-                  <input class="radio-input employment" type="radio" id="unemployed" name="employement" value="Unemployed" <?php echo e($data['employement']==='Unemployed'?'checked':''); ?> disabled>
+                  <input class="radio-input employment" type="radio" id="unemployed" name="employment" value="Unemployed" <?php echo e($data['employment']==='Unemployed'?'checked':''); ?> disabled>
                   <label for="unemployed">Unemployed</label>
                 </div>
               </div>
@@ -522,8 +522,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="pmname" class="label-input-tag">Middlename *</label>
-              <input type="text" id="pmname" name="pmname" placeholder="Middlename" value="<?php echo e($data['pmname']); ?>" disabled>
+              <label for="pmname" class="label-input-tag">Middle Name *</label>
+              <input type="text" id="pmname" name="pmname" placeholder="Middle Name" value="<?php echo e($data['pmname']); ?>" disabled>
               <?php $__errorArgs = ['pmname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -536,8 +536,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="input-data">
-              <label for="psname" class="label-input-tag">Suffix Name *</label>
-              <input type="text" id="psname" name="psname" placeholder="Suffix Name" value="<?php echo e($data['psname']); ?>" disabled>
+              <label for="psname" class="label-input-tag">Suffix *</label>
+              <input type="text" id="psname" name="psname" placeholder="Suffix" value="<?php echo e($data['psname']); ?>" disabled>
               <?php $__errorArgs = ['psname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
